@@ -1,0 +1,34 @@
+{
+  "onboarding": {
+    "message": "Selamat Datang Di TIMS"
+  },
+  "settings": {
+    "about": "Tentang",
+    "app_name": "Nama Aplikasi",
+    "arabic": "Arab",
+    "english": "Inggris",
+    "indonesia":"indonesia",
+    "generale": "Umum",
+    "github": "Github",
+    "language": "Bahasa",
+    "links": "Links",
+    "logout": "Keluar",
+    "more": "Lebih",
+    "privacy": "Privacy Policy",
+    "rate": "Rating",
+    "share": "Berbagi",
+    "support": "Dukungan",
+    "support_us": "Dukungan Kami",
+    "terms": "Terms of Service",
+    "theme": {
+      "dark": "Gelap",
+      "light": "Terang",
+      "system": "Sistem",
+      "title": "Tema"
+    },
+    "title": "Pengaturan",
+    "version": "Versi",
+    "website": "Website"
+  },
+  "welcome": "Selamat Datang Di Aplikasi TIMS"
+}
