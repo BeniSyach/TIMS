@@ -19,7 +19,7 @@ export const ProfilHome = ({ text, subText, profil }: Props) => {
         contentFit="cover"
         source={images[profil] || require('../../assets/icon.png')}
       />
-      <View className="flex-col pl-4">
+      <View className="flex-col pl-3">
         <Text className="text-xl font-bold">{text}</Text>
         <Text className="text font-bold">{subText}</Text>
       </View>

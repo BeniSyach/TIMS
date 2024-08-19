@@ -26,7 +26,7 @@ const Statistics: React.FC<Props> = ({ selected, id }) => (
       </Link>
     )}
     {selected === 'pendukung' && (
-      <Link href={`/pendukung/${id}`} asChild>
+      <Link href={`/pendukung`} asChild>
         <Pressable>
           <Title text="Total Penduduk" />
           <Border className="bg-amber-700">

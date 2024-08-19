@@ -14,7 +14,7 @@ export const HeaderHome = ({ text, subText }: Props) => {
         contentFit="cover"
         source={require('../../assets/icon.png')}
       />
-      <View className="flex-col pl-4">
+      <View className="flex-col pl-3">
         <Text className="text-xl font-bold">{text}</Text>
         <Text className="text font-bold">{subText}</Text>
       </View>

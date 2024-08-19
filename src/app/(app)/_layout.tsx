@@ -39,43 +39,33 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="users"
+        name="relawan"
         options={{
-          title: 'users',
+          title: 'Relawan',
           headerShown: false,
           tabBarIcon: ({ color }) => <UsersMenu color={color} />,
-          tabBarTestID: 'users-tab',
+          tabBarTestID: 'relawan-tab',
         }}
       />
 
       <Tabs.Screen
-        name="style"
+        name="pendukung"
         options={{
-          title: 'Style',
+          title: 'Pendukung',
           headerShown: false,
           tabBarIcon: ({ color }) => <UserGroup color={color} />,
-          tabBarTestID: 'style-tab',
+          tabBarTestID: 'pendukung-tab',
         }}
       />
       <Tabs.Screen
-        name="settings"
+        name="profile"
         options={{
-          title: 'Settings',
+          title: 'Profile',
           headerShown: false,
           tabBarIcon: ({ color }) => <UserCircle color={color} />,
-          tabBarTestID: 'settings-tab',
+          tabBarTestID: 'profile-tab',
         }}
       />
     </Tabs>
   );
 }
-
-// const CreateNewPostLink = () => {
-//   return (
-//     <Link href="/feed/add-post" asChild>
-//       <Pressable>
-//         <Text className="px-3 text-primary-300">Create</Text>
-//       </Pressable>
-//     </Link>
-//   );
-// };
