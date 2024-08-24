@@ -21,18 +21,18 @@ const KategoriButton: React.FC<Props> = ({ selected, setSelected }) => {
       <Button
         variant="blue"
         size="default"
-        label="Pendukung"
+        label="Timses"
         className="mx-2 flex-1"
-        active={selected === 'pendukung' ? true : false}
-        onPress={() => setSelected('pendukung')}
+        active={selected === 'timses' ? true : false}
+        onPress={() => setSelected('timses')}
       />
       <Button
         variant="blue"
         size="default"
-        label="Relawan"
+        label="Pendukung"
         className="ml-2 flex-1"
-        active={selected === 'relawan' ? true : false}
-        onPress={() => setSelected('relawan')}
+        active={selected === 'pendukung' ? true : false}
+        onPress={() => setSelected('pendukung')}
       />
     </View>
   );

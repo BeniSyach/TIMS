@@ -7,7 +7,6 @@ import * as z from 'zod';
 import { Button, ControlledInput, Text, View } from '@/ui';
 
 const schema = z.object({
-  name: z.string().optional(),
   email: z
     .string({
       required_error: 'Email is required',
@@ -24,24 +23,18 @@ export type FormType = z.infer<typeof schema>;
 
 export type LoginFormProps = {
   onSubmit?: SubmitHandler<FormType>;
+  loading: boolean;
 };
 
-export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
+export const LoginForm = ({ onSubmit = () => {}, loading }: LoginFormProps) => {
   const { handleSubmit, control } = useForm<FormType>({
     resolver: zodResolver(schema),
   });
   return (
     <View className="flex-1 justify-center p-4">
       <Text testID="form-title" className="pb-6 text-center text-2xl">
-        Sign In
+        Masuk
       </Text>
-
-      <ControlledInput
-        testID="name"
-        control={control}
-        name="name"
-        label="Name"
-      />
 
       <ControlledInput
         testID="email-input"
@@ -54,13 +47,15 @@ export const LoginForm = ({ onSubmit = () => {} }: LoginFormProps) => {
         control={control}
         name="password"
         label="Password"
-        placeholder="***"
+        placeholder="*******"
         secureTextEntry={true}
       />
       <Button
         testID="login-button"
         label="Login"
         onPress={handleSubmit(onSubmit)}
+        loading={loading}
+        disabled={loading}
       />
     </View>
   );

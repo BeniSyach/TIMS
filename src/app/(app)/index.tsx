@@ -27,19 +27,17 @@ export default function Home() {
   //   );
   // }
   return (
-    <>
+    <SafeAreaView className="flex-1">
       <FocusAwareStatusBar />
       <ScrollView className="px-2">
-        <SafeAreaView className="flex-1">
-          <Header />
-          <Biografi />
-          <KategoriButton selected={selected} setSelected={setSelected} />
-          <Statistics selected={selected} id={id} />
-          <TotalSuara />
-          <Summary />
-          <AddPost />
-        </SafeAreaView>
+        <Header />
+        <Biografi />
+        <KategoriButton selected={selected} setSelected={setSelected} />
+        <Statistics selected={selected} id={id} />
+        <TotalSuara />
+        <Summary />
+        <AddPost />
       </ScrollView>
-    </>
+    </SafeAreaView>
   );
 }

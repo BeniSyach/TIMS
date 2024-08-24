@@ -12,13 +12,23 @@ const images: { [key: string]: any } = {
 };
 
 export const ProfilHome = ({ text, subText, profil }: Props) => {
+  const isValidUrl = (url: string) => {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const imageSource =
+    profil && isValidUrl(profil)
+      ? { uri: profil }
+      : images[profil] || images['icon.png'];
+
   return (
     <View className="flex-row items-center py-1">
-      <Image
-        className="h-12 w-12"
-        contentFit="cover"
-        source={images[profil] || require('../../assets/icon.png')}
-      />
+      <Image className="h-12 w-12" contentFit="cover" source={imageSource} />
       <View className="flex-col pl-3">
         <Text className="text-xl font-bold">{text}</Text>
         <Text className="text font-bold">{subText}</Text>

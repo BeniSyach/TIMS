@@ -1,20 +1,16 @@
-import { Link } from 'expo-router';
 import React from 'react';
 
-import type { Pendukung } from '@/api';
-import { Image, Pressable, Text, View } from '@/ui';
+import type { Pendukung } from '@/api/pendukung';
+
+import { Border } from '../border';
+import { PendukungHome } from './pendukung-home';
 
 type Props = Pendukung;
 
-export const Card = ({ title, url, id }: Props) => {
+export const CardPendukung = ({ name, pendukung_id, nik, tps }: Props) => {
   return (
-    <Link href={`/detail/${id}`} asChild>
-      <Pressable>
-        <View className="m-2 rounded-lg bg-white p-4 shadow-lg">
-          <Image source={{ uri: url }} className="h-32 w-full rounded-lg" />
-          <Text className="mt-2 text-lg font-bold">{title}</Text>
-        </View>
-      </Pressable>
-    </Link>
+    <Border>
+      <PendukungHome text={name} subText={nik} profil={tps} id={pendukung_id} />
+    </Border>
   );
 };

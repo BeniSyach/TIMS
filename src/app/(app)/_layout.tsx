@@ -39,22 +39,22 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="relawan"
-        options={{
-          title: 'Relawan',
-          headerShown: false,
-          tabBarIcon: ({ color }) => <UsersMenu color={color} />,
-          tabBarTestID: 'relawan-tab',
-        }}
-      />
-
-      <Tabs.Screen
         name="pendukung"
         options={{
           title: 'Pendukung',
           headerShown: false,
-          tabBarIcon: ({ color }) => <UserGroup color={color} />,
+          tabBarIcon: ({ color }) => <UsersMenu color={color} />,
           tabBarTestID: 'pendukung-tab',
+        }}
+      />
+
+      <Tabs.Screen
+        name="timses"
+        options={{
+          title: 'Timses',
+          headerShown: false,
+          tabBarIcon: ({ color }) => <UserGroup color={color} />,
+          tabBarTestID: 'timses-tab',
         }}
       />
       <Tabs.Screen

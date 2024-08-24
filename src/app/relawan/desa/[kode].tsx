@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import type { Pendukung } from '@/api';
 import { getPendukung } from '@/api';
-import { Card } from '@/components/pendukung/card';
+import { CardDesaComponent } from '@/components/pendukung/cards-desa-components';
 import {
   ActivityIndicator,
   EmptyList,
@@ -22,7 +22,7 @@ export default function PendukungPost() {
   });
 
   const renderItem = React.useCallback(
-    ({ item }: { item: Pendukung }) => <Card {...item} />,
+    ({ item }: { item: Pendukung }) => <CardDesaComponent {...item} />,
     []
   );
 
@@ -31,8 +31,8 @@ export default function PendukungPost() {
       <View className="flex-1 justify-center  p-3">
         <Stack.Screen
           options={{
-            title: 'Total Pendukung',
-            headerBackTitle: 'Total Pendukung',
+            title: 'Total Relawan Desa',
+            headerBackTitle: 'Total Relawan Desa',
           }}
         />
         <FocusAwareStatusBar />
@@ -45,12 +45,14 @@ export default function PendukungPost() {
       <View className="flex-1 justify-center p-3">
         <Stack.Screen
           options={{
-            title: 'Total Pendukung',
-            headerBackTitle: 'Total Pendukung',
+            title: 'Total Relawan Desa',
+            headerBackTitle: 'Total Relawan Desa',
           }}
         />
         <FocusAwareStatusBar />
-        <Text className="text-center">Error loading post Total Pendukung</Text>
+        <Text className="text-center">
+          Error loading post Total Relawan Desa
+        </Text>
       </View>
     );
   }
@@ -59,8 +61,8 @@ export default function PendukungPost() {
     <View className="flex-1 p-3 ">
       <Stack.Screen
         options={{
-          title: 'Total Pendukung',
-          headerBackTitle: 'Total Pendukung',
+          title: 'Total Relawan Desa',
+          headerBackTitle: 'Total Relawan Desa',
         }}
       />
       <FocusAwareStatusBar />

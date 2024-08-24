@@ -20,8 +20,8 @@ export default function PendukungDetail() {
       <View className="flex-1 justify-center  p-3">
         <Stack.Screen
           options={{
-            title: 'Total Pendukung',
-            headerBackTitle: 'Total Pendukung',
+            title: 'Relawan',
+            headerBackTitle: 'Relawan',
           }}
         />
         <FocusAwareStatusBar />
@@ -34,12 +34,12 @@ export default function PendukungDetail() {
       <View className="flex-1 justify-center p-3">
         <Stack.Screen
           options={{
-            title: 'Total Pendukung',
-            headerBackTitle: 'Total Pendukung',
+            title: 'Relawan',
+            headerBackTitle: 'Relawan',
           }}
         />
         <FocusAwareStatusBar />
-        <Text className="text-center">Error loading post Total Pendukung</Text>
+        <Text className="text-center">Error loading post Relawan</Text>
       </View>
     );
   }
@@ -47,8 +47,8 @@ export default function PendukungDetail() {
     <>
       <Stack.Screen
         options={{
-          title: 'Pendukung',
-          headerBackTitle: 'Pendukung',
+          title: 'Relawan',
+          headerBackTitle: 'Relawan',
         }}
       />
       <Border>

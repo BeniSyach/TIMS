@@ -25,10 +25,10 @@ const Statistics: React.FC<Props> = ({ selected, id }) => (
         </Pressable>
       </Link>
     )}
-    {selected === 'pendukung' && (
-      <Link href={`/pendukung`} asChild>
+    {selected === 'timses' && (
+      <Link href={`/timses`} asChild>
         <Pressable>
-          <Title text="Total Penduduk" />
+          <Title text="Total Timses" />
           <Border className="bg-amber-700">
             <Text className="bg-amber-700 text-center text-xl font-bold">
               100
@@ -37,10 +37,10 @@ const Statistics: React.FC<Props> = ({ selected, id }) => (
         </Pressable>
       </Link>
     )}
-    {selected === 'relawan' && (
-      <Link href={`/feed/${id}`} asChild>
+    {selected === 'pendukung' && (
+      <Link href={`/relawan`} asChild>
         <Pressable>
-          <Title text="Total Relawan" />
+          <Title text="Total Pendukung" />
           <Border className="bg-green-500">
             <Text className="bg-green-500 text-center text-xl font-bold">
               1213

@@ -15,3 +15,4 @@ export * from './user-circle';
 export * from './user-group';
 export * from './users';
 export * from './website';
+export * from './sequares';

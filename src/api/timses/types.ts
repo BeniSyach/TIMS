@@ -1,12 +1,13 @@
-export type Pendukung = {
-  pendukung_id: string;
+export type Timses = {
+  timses_id: string;
   nik: number;
   name: string;
   phone: string;
+  email: string;
+  password: string;
   kabupaten: string;
   kecamatan: string;
   desa: string;
-  tps: string;
   address: string;
   aktif: boolean;
   created_by: number;
