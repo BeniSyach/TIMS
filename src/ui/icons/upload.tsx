@@ -3,7 +3,7 @@ import type { SvgProps } from 'react-native-svg';
 import Svg, { Path } from 'react-native-svg';
 
 export const Upload = ({ ...props }: SvgProps) => (
-<Svg width={24} height={24} fill="none" viewBox="0 0 24 24" {...props}>
+  <Svg width={24} height={24} fill="none" viewBox="0 0 24 24" {...props}>
     <Path
       strokeLinecap="round"
       strokeLinejoin="round"

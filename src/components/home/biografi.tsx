@@ -1,19 +1,21 @@
 import React from 'react';
 
+import type { DataBiografi } from '@/api/biografi';
+
 import { Border } from '../border';
 import { SubTitle } from '../sub-title';
 import { Title } from '../title';
-import { DataBiografi } from '@/api/biografi';
 
 interface Props {
-  data: DataBiografi;
+  data: DataBiografi[];
 }
 
-export const Biografi = ({data} : Props) => {
+export const Biografi = ({ data }: Props) => {
+  const [firstItem] = data;
   return (
     <Border>
       <Title text="Biografi" />
-      <SubTitle text={data.deskripsi} />
+      <SubTitle text={firstItem.deskripsi} />
     </Border>
   );
 };

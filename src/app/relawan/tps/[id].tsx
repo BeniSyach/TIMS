@@ -52,7 +52,9 @@ export default function PendukungPost() {
           }}
         />
         <FocusAwareStatusBar />
-        <Text className="text-center">Error loading post Total TPS Desa</Text>
+        <Text className="text-center dark:text-black">
+          Error loading post Total TPS Desa
+        </Text>
       </View>
     );
   }

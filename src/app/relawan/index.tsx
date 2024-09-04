@@ -45,7 +45,7 @@ export default function RelawanPost() {
           }}
         />
         <FocusAwareStatusBar />
-        <Text className="text-center">
+        <Text className="text-center dark:text-black">
           Error loading post Total Pendukung Setiap Kecamatan
         </Text>
       </View>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import { getDataBiografi } from '@/api/biografi';
 import { getTotalSuara } from '@/api/dashboard/total-suara';
 import { AddPost } from '@/components/home/add-post';
 import { Biografi } from '@/components/home/biografi';
@@ -18,14 +19,16 @@ import {
   Text,
   View,
 } from '@/ui';
-import { getDataBiografi } from '@/api/biografi';
 
 export default function Home() {
   const signOut = useAuth.use.signOut();
   const { data, isPending, isError } = getTotalSuara();
-  const {data: dataBiografi, isPending : pendingBiografi, isError: errorBiografi} = getDataBiografi();
+  const {
+    data: dataBiografi,
+    isPending: pendingBiografi,
+    isError: errorBiografi,
+  } = getDataBiografi();
   const [selected, setSelected] = useState<string>('penduduk');
-
 
   if (pendingBiografi) {
     return (
@@ -78,11 +81,11 @@ export default function Home() {
     <SafeAreaView className="flex-1">
       <FocusAwareStatusBar />
       <ScrollView className="px-2">
-        <Header  data={dataBiografi} />
+        <Header data={dataBiografi} />
         <Biografi data={dataBiografi} />
         <KategoriButton selected={selected} setSelected={setSelected} />
         <Statistics selected={selected} data={data} />
-        <TotalSuara />
+        <TotalSuara data={data} />
         <Summary data={data} />
         <AddPost />
       </ScrollView>

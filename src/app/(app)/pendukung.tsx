@@ -1,6 +1,11 @@
+import { Env } from '@env';
 import { FlashList } from '@shopify/flash-list';
-import React, { useEffect, useState } from 'react';
 import * as FileSystem from 'expo-file-system';
+import { useRouter } from 'expo-router';
+import * as Sharing from 'expo-sharing';
+import React, { useEffect, useState } from 'react';
+import { Alert } from 'react-native';
+
 import type { Pendukung } from '@/api';
 import { getPendukung } from '@/api';
 import { HeaderHome } from '@/components/header-home';
@@ -18,8 +23,6 @@ import {
 import BubbleButton from '@/ui/bubble-button';
 import { Export } from '@/ui/icons/export';
 import { Upload } from '@/ui/icons/upload';
-import { Env } from '@env';
-import { useRouter } from 'expo-router';
 
 export default function PendukungPage() {
   const router = useRouter();
@@ -34,23 +37,30 @@ export default function PendukungPage() {
   };
 
   const handleOptionPress = async (option: string) => {
-    if(option === 'Export'){
+    if (option === 'Export') {
       const url = `${Env.API_URL}/api/v1/timses/dokumen/export`;
-      console.log(`Export`);
+      console.log('Export');
+
       try {
         // Lokasi penyimpanan file di perangkat
         const fileUri = FileSystem.documentDirectory + 'export_TIMS.xlsx';
-        
+
         // Mendownload file dari URL
         const { uri } = await FileSystem.downloadAsync(url, fileUri);
-    
         console.log('File has been downloaded to:', uri);
+
+        // Optionally, share the file to view it or perform further actions
+        if (await Sharing.isAvailableAsync()) {
+          await Sharing.shareAsync(uri);
+        }
+
         return uri;
       } catch (error) {
         console.error('Error downloading file:', error);
+        Alert.alert('Error', 'Failed to download file.');
       }
-    }else{
-      console.log(`Import`);
+    } else {
+      console.log('Import');
       router.push('export');
     }
   };
@@ -118,7 +128,9 @@ export default function PendukungPage() {
     return (
       <View className="flex-1 justify-center p-3">
         <FocusAwareStatusBar />
-        <Text className="text-center">Error Mengambil Data Pendukung</Text>
+        <Text className="text-center text-black dark:text-black">
+          Error Mengambil Data Pendukung
+        </Text>
       </View>
     );
   }
@@ -145,6 +157,7 @@ export default function PendukungPage() {
         />
         <View style={{ position: 'absolute', bottom: 20, right: 20 }}>
           <BubbleButton
+            className="bg-gray-400 dark:bg-gray-500"
             onPress={handleBubblePress}
             active={showOptions}
             size="lg"

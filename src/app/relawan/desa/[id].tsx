@@ -50,7 +50,7 @@ export default function PendukungPost() {
           }}
         />
         <FocusAwareStatusBar />
-        <Text className="text-center">
+        <Text className="text-center dark:text-black">
           Error loading post Total Relawan Desa
         </Text>
       </View>

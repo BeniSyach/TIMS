@@ -131,8 +131,8 @@ export default function PendukungDetail() {
         onDismiss={dismiss}
       >
         <View style={{ padding: 20 }}>
-          <Text className="text-center">{error}</Text>
-          <Button label="Tutup" onPress={dismiss} />
+          <Text className="text-center dark:text-black">{error}</Text>
+          <Button label="Tutup" variant="blue" onPress={dismiss} />
         </View>
       </Modal>
     </>

@@ -1,20 +1,19 @@
-import { Link } from 'expo-router';
-import * as React from 'react';
-import { Button, Image, Modal, Pressable, Text, useModal, View } from '@/ui';
-import { Pencil, Trash } from '@/ui/icons';
-import { getToken } from '@/core/auth/utils';
 import { Env } from '@env';
+import { Link } from 'expo-router';
+import { colorScheme } from 'nativewind';
+import * as React from 'react';
 import { Alert } from 'react-native';
+
+import { getToken } from '@/core/auth/utils';
+import { Button, Modal, Pressable, Text, useModal, View } from '@/ui';
+import { Pencil, Trash, Users } from '@/ui/icons';
 
 type Props = {
   text: string;
   subText: number;
   profil: string;
   id: string;
-  aktif: boolean
-};
-const images: { [key: string]: any } = {
-  'icon.png': require('../../../assets/icon.png'),
+  aktif: boolean;
 };
 
 export const PendukungHome = ({ text, subText, profil, id, aktif }: Props) => {
@@ -24,9 +23,12 @@ export const PendukungHome = ({ text, subText, profil, id, aktif }: Props) => {
   const truncatedText =
     text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
 
-  const hapusDataPendukung = async (id : string) =>{
+  const currentScheme = colorScheme.get();
+  const color = currentScheme === 'dark' ? '#FFF' : '#000';
+
+  const hapusDataPendukung = async (id: string) => {
     dismiss();
-    console.log('id', id)
+    console.log('id', id);
     const token = await getToken();
     if (!token?.access) {
       console.error('Token is invalid or missing');
@@ -44,7 +46,7 @@ export const PendukungHome = ({ text, subText, profil, id, aktif }: Props) => {
             Authorization: `Bearer ${token.access}`,
           },
           body: JSON.stringify({
-            aktif : false
+            aktif: false,
           }),
         }
       );
@@ -56,48 +58,61 @@ export const PendukungHome = ({ text, subText, profil, id, aktif }: Props) => {
         Alert.alert('Sukses', 'Data Pendukung berhasil dinonaktifkan');
       } else {
         console.error('Tambah Data Pendukung failed:', result.message);
-        Alert.alert('Gagal', `Gagal menonaktifkan data Pendukung: ${result.message}`);
+        Alert.alert(
+          'Gagal',
+          `Gagal menonaktifkan data Pendukung: ${result.message}`
+        );
       }
     } catch (error) {
       console.error('Error during Edit Data Pendukung:', error);
-      Alert.alert('Error', 'Terjadi kesalahan saat Menonaktifkan data Pendukung');
-  }
-    
-  }
+      Alert.alert(
+        'Error',
+        'Terjadi kesalahan saat Menonaktifkan data Pendukung'
+      );
+    }
+  };
 
   return (
     <View className="flex-row items-center justify-between py-1">
       <View className="flex-row items-center">
-        <Image
-          className="h-12 w-12"
-          contentFit="cover"
-          source={images[profil] || require('../../../assets/icon.png')}
-        />
+        <Users color={color} />
         <View className="flex-col pl-3">
-          <Text className="text-sm">{truncatedText}</Text>
-          <Text className="text-sm">{subText}</Text>
-          <Text className="text-sm">{profil}</Text>
-          <Text className="text-sm">{aktif ? 'Aktif' : 'Tidak Aktif'}</Text>
+          <Text className="text-sm text-black dark:text-white">
+            {truncatedText}
+          </Text>
+          <Text className="text-sm text-black dark:text-white">{subText}</Text>
+          <Text className="text-sm text-black dark:text-white">
+            TPS {profil}
+          </Text>
+          <Text className="text-sm text-black dark:text-white">
+            {aktif ? 'Aktif' : 'Tidak Aktif'}
+          </Text>
         </View>
       </View>
       <View className="flex-row space-x-2">
         <Link href={`detail/${id}`} asChild>
           <Pressable>
-            <Pencil className="mx-2" />
+            <Pencil className="mx-2" color={color} />
           </Pressable>
         </Link>
-        <Trash onPress={() => present()}/>
+        <Trash color={color} onPress={() => present()} />
       </View>
       <Modal
         ref={ref}
         snapPoints={['40%']}
-        title="Login Error"
+        title="Nonaktifkan Pendukung"
         onDismiss={dismiss}
       >
         <View style={{ padding: 20 }}>
-          <Text className="text-center">Apakah Anda Yakin Menonaktifkan Pendukung Ini ?</Text>
-          <Button label="Ya" onPress={() => hapusDataPendukung(id)} />
-          <Button label="Tutup" onPress={dismiss} />
+          <Text className="text-center dark:text-black">
+            Apakah Anda Yakin Menonaktifkan Pendukung Ini ?
+          </Text>
+          <Button
+            label="Ya"
+            variant="blue"
+            onPress={() => hapusDataPendukung(id)}
+          />
+          <Button label="Tutup" variant="secondary" onPress={dismiss} />
         </View>
       </Modal>
     </View>

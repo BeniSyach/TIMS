@@ -13,6 +13,7 @@ import { useAuth } from '@/core';
 import { getToken } from '@/core/auth/utils';
 import type { Option } from '@/ui';
 import {
+  ActivityIndicator,
   Button,
   ControlledInput,
   FocusAwareStatusBar,
@@ -167,20 +168,6 @@ export default function ProfilePage() {
     } finally {
       setLoading(false);
     }
-    // addPost(
-    //   { ...data, userId: 1 },
-    //   {
-    //     onSuccess: () => {
-    //       showMessage({
-    //         message: 'Post added successfully',
-    //         type: 'success',
-    //       });
-    //     },
-    //     onError: () => {
-    //       showErrorMessage('Error adding post');
-    //     },
-    //   }
-    // );
   };
 
   const onSubmitPassword = async (FromdataPassword: FormTypePassword) => {
@@ -232,6 +219,15 @@ export default function ProfilePage() {
       setLoadingPassword(false);
     }
   };
+
+  if (isPending) {
+    return (
+      <View className="flex-1 justify-center  p-3">
+        <FocusAwareStatusBar />
+        <ActivityIndicator />
+      </View>
+    );
+  }
 
   if (isError) {
     return (
@@ -343,8 +339,8 @@ export default function ProfilePage() {
         onDismiss={dismiss}
       >
         <View style={{ padding: 20 }}>
-          <Text className="text-center">{error}</Text>
-          <Button label="Tutup" onPress={dismiss} />
+          <Text className="text-center dark:text-black">{error}</Text>
+          <Button label="Tutup" variant="blue" onPress={dismiss} />
         </View>
       </Modal>
     </SafeAreaView>

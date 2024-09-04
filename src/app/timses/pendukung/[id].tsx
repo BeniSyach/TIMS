@@ -1,6 +1,11 @@
 import { FlashList } from '@shopify/flash-list';
+import { Stack, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
+
+import type { PendukungTimses } from '@/api/get-pendukung-timses';
+import { getPendukungTimses } from '@/api/get-pendukung-timses';
 import { HeaderHome } from '@/components/header-home';
+import { CardPendukungTimses } from '@/components/timses/card-detail-pendukung';
 import { Title } from '@/components/title';
 import {
   ActivityIndicator,
@@ -10,9 +15,6 @@ import {
   Text,
   View,
 } from '@/ui';
-import { CardPendukungTimses } from '@/components/timses/card-detail-pendukung';
-import { getPendukungTimses, PendukungTimses } from '@/api/get-pendukung-timses';
-import { Stack, useLocalSearchParams } from 'expo-router';
 
 export default function PendukungPage() {
   const local = useLocalSearchParams<{ id: string }>();
@@ -75,7 +77,7 @@ export default function PendukungPage() {
   if (isPending && page === 1) {
     return (
       <View className="flex-1 justify-center p-3">
-              <Stack.Screen
+        <Stack.Screen
           options={{
             title: 'Data Pendukung',
             headerBackTitle: 'Data Pendukung',
@@ -90,7 +92,7 @@ export default function PendukungPage() {
   if (isError) {
     return (
       <View className="flex-1 justify-center p-3">
-              <Stack.Screen
+        <Stack.Screen
           options={{
             title: 'Data Pendukung',
             headerBackTitle: 'Data Pendukung',
@@ -105,11 +107,11 @@ export default function PendukungPage() {
   return (
     <SafeAreaView className="flex-1">
       <Stack.Screen
-          options={{
-            title: 'Data Pendukung',
-            headerBackTitle: 'Data Pendukung',
-          }}
-        />
+        options={{
+          title: 'Data Pendukung',
+          headerBackTitle: 'Data Pendukung',
+        }}
+      />
       <FocusAwareStatusBar />
       <View className="h-full px-2">
         <HeaderHome />

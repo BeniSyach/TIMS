@@ -9,6 +9,8 @@ type Props = {
 };
 const images: { [key: string]: any } = {
   'icon.png': require('../../assets/icon.png'),
+  'bupati.jpg': require('../../assets/bupati.jpg'),
+  'wakilbupati.jpg': require('../../assets/wakilbupati.jpg'),
 };
 
 export const ProfilHome = ({ text, subText, profil }: Props) => {
@@ -28,7 +30,11 @@ export const ProfilHome = ({ text, subText, profil }: Props) => {
 
   return (
     <View className="flex-row items-center py-1">
-      <Image className="h-12 w-12" contentFit="cover" source={imageSource} />
+      <Image
+        className="h-20 w-12 rounded-lg"
+        contentFit="cover"
+        source={imageSource}
+      />
       <View className="flex-col pl-3">
         <Text className="text-xl font-bold">{text}</Text>
         <Text className="text font-bold">{subText}</Text>

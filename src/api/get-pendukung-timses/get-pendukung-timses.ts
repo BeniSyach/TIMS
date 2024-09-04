@@ -8,7 +8,7 @@ type Response = {
   data: PendukungTimses[];
 };
 
-type Variables = { nik: number, page: number; limit: number };
+type Variables = { nik: number; page: number; limit: number };
 
 export const getPendukungTimses = createQuery<Response, Variables, AxiosError>({
   queryKey: ['PendukungTimses'], // Static query key, remove the function

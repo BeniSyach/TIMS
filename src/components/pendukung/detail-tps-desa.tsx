@@ -15,6 +15,7 @@ export const CardTpsDesaDetail = ({ name, pendukung_id, nik, tps }: Props) => {
         subText={Number(nik)}
         profil={tps}
         id={pendukung_id}
+        aktif={true}
       />
     </Border>
   );

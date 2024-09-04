@@ -52,14 +52,10 @@ export default function PendukungDetail() {
         }}
       />
       <Border>
-        <ProfilHome
-          text="Raisa"
-          subText="Calon DPRD Kota/Kab"
-          profil={data.url}
-        />
+        <ProfilHome text="Raisa" subText="Calon DPRD Kota/Kab" profil="tes" />
       </Border>
       <Border>
-        <Title text={data.title} />
+        <Title text={data.data.name} />
       </Border>
       <Border>
         <Title text="tes" />

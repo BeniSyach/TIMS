@@ -19,6 +19,7 @@ export default function Login() {
   const onSubmit: LoginFormProps['onSubmit'] = async (data) => {
     console.log('data login', data);
     setLoading(true);
+    console.log('url login', Env.API_URL);
     try {
       const response = await fetch(`${Env.API_URL}/api/v1/timses/auth/login`, {
         method: 'POST',
@@ -64,8 +65,8 @@ export default function Login() {
         onDismiss={dismiss}
       >
         <View style={{ padding: 20 }}>
-          <Text className="text-center">{error}</Text>
-          <Button label="Tutup" onPress={dismiss} />
+          <Text className="text-center dark:text-black">{error}</Text>
+          <Button label="Tutup" variant="blue" onPress={dismiss} />
         </View>
       </Modal>
     </>

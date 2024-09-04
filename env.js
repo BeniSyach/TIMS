@@ -36,8 +36,8 @@ require('dotenv').config({
 const BUNDLE_ID = 'com.tims'; // ios bundle id
 const PACKAGE = 'com.tims'; // android package name
 const NAME = 'TIMS'; // app name
-const EXPO_ACCOUNT_OWNER = 'expo-owner'; // expo account owner
-const EAS_PROJECT_ID = 'c3e1075b-6fe7-4686-aa49-35b46a229044'; // eas project id
+const EXPO_ACCOUNT_OWNER = 'benisyach'; // expo account owner
+const EAS_PROJECT_ID = '118d722b-f035-4857-93dc-466381b53e1c'; // eas project id
 const SCHEME = 'TIMS'; // app scheme
 
 /**

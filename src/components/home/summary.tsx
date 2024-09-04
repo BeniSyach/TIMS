@@ -24,7 +24,9 @@ const Summary: React.FC<Props> = ({ data }) => {
 
       <View className="flex-row justify-between pb-4">
         {/* <Text className="mr-2 flex-1 text-center text-xl font-bold">50</Text> */}
-        <Text className="mx-2 flex-1 text-center text-xl font-bold">{data.total_target}</Text>
+        <Text className="mx-2 flex-1 text-center text-xl font-bold">
+          {data.total_target}
+        </Text>
         <Text className="ml-2 flex-1 text-center text-xl font-bold">
           {data.jumlah_tps}
         </Text>

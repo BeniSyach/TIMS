@@ -1,6 +1,8 @@
+import { colorScheme } from 'nativewind';
 import * as React from 'react';
 
-import { Image, Text, View } from '@/ui';
+import { Text, View } from '@/ui';
+import { Users } from '@/ui/icons';
 
 type Props = {
   text: string;
@@ -8,28 +10,20 @@ type Props = {
   profil: string;
   id: string;
 };
-const images: { [key: string]: any } = {
-  'icon.png': require('../../../assets/icon.png'),
-};
 
 export const TimsesHome = ({ text, subText, profil, id }: Props) => {
   console.log('id', id);
   const maxLength = 40;
   const truncatedText =
     text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
-  // const truncatedSubText =
-  //   subText.length > maxLength
-  //     ? `${subText.substring(0, maxLength)}...`
-  //     : subText;
+
+  const currentScheme = colorScheme.get();
+  const color = currentScheme === 'dark' ? '#FFF' : '#000';
 
   return (
     <View className="flex-row items-center justify-between py-1">
       <View className="flex-row items-center">
-        <Image
-          className="h-12 w-12"
-          contentFit="cover"
-          source={images[profil] || require('../../../assets/icon.png')}
-        />
+        <Users color={color} />
         <View className="flex-col pl-3">
           <Text className="text-sm">{truncatedText}</Text>
           <Text className="text-sm">{subText}</Text>
