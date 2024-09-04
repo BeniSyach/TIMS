@@ -1,6 +1,7 @@
 import { Link } from 'expo-router';
 import React from 'react';
 
+import type { totalSuara } from '@/api/dashboard/total-suara';
 import { Pressable, Text } from '@/ui';
 
 import { Border } from '../border';
@@ -8,22 +9,20 @@ import { Title } from '../title';
 
 interface Props {
   selected: string;
-  id: number;
+  data: totalSuara;
 }
 
-const Statistics: React.FC<Props> = ({ selected, id }) => (
+const Statistics: React.FC<Props> = ({ selected, data }) => (
   <>
     {selected === 'penduduk' && (
-      <Link href={`/feed/${id}`} asChild>
-        <Pressable>
-          <Title text="Total Penduduk Deli Serdang" />
-          <Border className="bg-indigo-500">
-            <Text className="bg-indigo-500 text-center text-xl font-bold">
-              2 018 164
-            </Text>
-          </Border>
-        </Pressable>
-      </Link>
+      <>
+        <Title text="Total DPT" />
+        <Border className="bg-indigo-500">
+          <Text className="bg-indigo-500 text-center text-xl font-bold">
+            {data.total_penduduk}
+          </Text>
+        </Border>
+      </>
     )}
     {selected === 'timses' && (
       <Link href={`/timses`} asChild>
@@ -31,7 +30,7 @@ const Statistics: React.FC<Props> = ({ selected, id }) => (
           <Title text="Total Timses" />
           <Border className="bg-amber-700">
             <Text className="bg-amber-700 text-center text-xl font-bold">
-              100
+              {data.total_timses}
             </Text>
           </Border>
         </Pressable>
@@ -43,7 +42,7 @@ const Statistics: React.FC<Props> = ({ selected, id }) => (
           <Title text="Total Pendukung" />
           <Border className="bg-green-500">
             <Text className="bg-green-500 text-center text-xl font-bold">
-              1213
+              {data.total_pendukung}
             </Text>
           </Border>
         </Pressable>

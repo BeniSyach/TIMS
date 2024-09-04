@@ -1,5 +1,5 @@
 export type kecamatan = {
-  id: string,
-  name: string,
-  regency_id: string
+  id: string;
+  name: string;
+  regency_id: string;
 };

@@ -1,5 +1,6 @@
 import { FlashList } from '@shopify/flash-list';
 import React, { useEffect, useState } from 'react';
+import * as FileSystem from 'expo-file-system';
 import type { Pendukung } from '@/api';
 import { getPendukung } from '@/api';
 import { HeaderHome } from '@/components/header-home';
@@ -15,10 +16,13 @@ import {
   View,
 } from '@/ui';
 import BubbleButton from '@/ui/bubble-button';
-import { Upload } from '@/ui/icons/upload';
 import { Export } from '@/ui/icons/export';
+import { Upload } from '@/ui/icons/upload';
+import { Env } from '@env';
+import { useRouter } from 'expo-router';
 
 export default function PendukungPage() {
+  const router = useRouter();
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<Pendukung[]>([]);
@@ -29,9 +33,26 @@ export default function PendukungPage() {
     setShowOptions(!showOptions);
   };
 
-  const handleOptionPress = (option: string) => {
-    console.log(`${option} button pressed`);
-    // Lakukan sesuatu di sini saat tombol opsi ditekan
+  const handleOptionPress = async (option: string) => {
+    if(option === 'Export'){
+      const url = `${Env.API_URL}/api/v1/timses/dokumen/export`;
+      console.log(`Export`);
+      try {
+        // Lokasi penyimpanan file di perangkat
+        const fileUri = FileSystem.documentDirectory + 'export_TIMS.xlsx';
+        
+        // Mendownload file dari URL
+        const { uri } = await FileSystem.downloadAsync(url, fileUri);
+    
+        console.log('File has been downloaded to:', uri);
+        return uri;
+      } catch (error) {
+        console.error('Error downloading file:', error);
+      }
+    }else{
+      console.log(`Import`);
+      router.push('export');
+    }
   };
 
   const {
@@ -54,7 +75,9 @@ export default function PendukungPage() {
       setData((prevData) => {
         const newData = [...prevData, ...fetchedData.data];
         const uniqueData = newData.filter(
-          (item, index, self) => index === self.findIndex((t) => t.pendukung_id === item.pendukung_id)
+          (item, index, self) =>
+            index ===
+            self.findIndex((t) => t.pendukung_id === item.pendukung_id)
         );
         return uniqueData;
       });
@@ -104,7 +127,7 @@ export default function PendukungPage() {
     <SafeAreaView className="flex-1">
       <FocusAwareStatusBar />
       <View className="h-full px-2">
-        <HeaderHome text="TIMS" subText="Aplikasi Tim Sukses" />
+        <HeaderHome />
         <View className="my-2">
           <Title text="Pendukung" />
         </View>
@@ -120,37 +143,35 @@ export default function PendukungPage() {
           onEndReachedThreshold={0.1}
           ListFooterComponent={isPending ? <ActivityIndicator /> : null}
         />
-         <View style={{ position: 'absolute', bottom: 20, right: 20 }}>
+        <View style={{ position: 'absolute', bottom: 20, right: 20 }}>
           <BubbleButton
-            // label='Aksi'
-            // icon={<Sequares color="white" />} 
             onPress={handleBubblePress}
             active={showOptions}
             size="lg"
           />
-                    {showOptions && (
-            <View className="absolute bottom-14 right-0 flex flex-col items-end mb-2">
+          {showOptions && (
+            <View className="absolute bottom-14 right-0 mb-2 flex flex-col items-end">
               <Pressable
                 onPress={() => handleOptionPress('Upload')}
-                className="bg-blue-500 rounded-full p-3 mb-2 text-center"
+                className="mb-2 rounded-full bg-blue-500 p-3 text-center"
               >
-              <View className="flex items-center justify-center">
-                <Upload color="white" />
-                <Text className="text-white mt-1">Upload</Text>
-              </View>
+                <View className="flex items-center justify-center">
+                  <Upload color="white" />
+                  <Text className="mt-1 text-white">Import</Text>
+                </View>
               </Pressable>
               <Pressable
                 onPress={() => handleOptionPress('Export')}
-                className="bg-green-500 rounded-full p-3"
+                className="rounded-full bg-green-500 p-3"
               >
-                  <View className="flex items-center justify-center">
-                <Export color="white" />
-                <Text className="text-white">Export</Text>
+                <View className="flex items-center justify-center">
+                  <Export color="white" />
+                  <Text className="text-white">Export</Text>
                 </View>
               </Pressable>
             </View>
           )}
-          </View>
+        </View>
       </View>
     </SafeAreaView>
   );

@@ -2,6 +2,7 @@ export type Pendukung = {
   pendukung_id: string;
   nik: number;
   name: string;
+  email: string;
   phone: string;
   kabupaten: string;
   kecamatan: string;

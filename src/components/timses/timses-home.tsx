@@ -1,8 +1,6 @@
-import { Link } from 'expo-router';
 import * as React from 'react';
 
-import { Image, Pressable, Text, View } from '@/ui';
-import { Pencil, Trash } from '@/ui/icons';
+import { Image, Text, View } from '@/ui';
 
 type Props = {
   text: string;
@@ -38,14 +36,14 @@ export const TimsesHome = ({ text, subText, profil, id }: Props) => {
           <Text className="text-sm">{profil}</Text>
         </View>
       </View>
-      <View className="flex-row space-x-2">
+      {/* <View className="flex-row space-x-2">
         <Link href={`detail/${id}`} asChild>
           <Pressable>
             <Pencil className="mx-2" />
           </Pressable>
         </Link>
         <Trash />
-      </View>
+      </View> */}
     </View>
   );
 };

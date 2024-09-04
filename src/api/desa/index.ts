@@ -1,2 +1,2 @@
-export * from './types';
 export * from './get-all-desa';
+export * from './types';

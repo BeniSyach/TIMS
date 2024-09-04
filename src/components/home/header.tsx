@@ -3,16 +3,20 @@ import React from 'react';
 import { Border } from '../border';
 import { HeaderHome } from '../header-home';
 import { ProfilHome } from '../profil-home';
+import { DataBiografi } from '@/api/biografi';
 
-export const Header = () => {
+interface Props {
+  data: DataBiografi;
+}
+
+export const Header = ({data}: Props) => {
   return (
     <>
-      <HeaderHome text="TIMS" subText="Aplikasi Tim Sukses" />
-
+      <HeaderHome />
       <Border>
         <ProfilHome
-          text="Raisa"
-          subText="Calon DPRD Kota/Kab"
+          text={data.nama_lengkap}
+          subText={data.jabatan}
           profil="icon.png"
         />
       </Border>

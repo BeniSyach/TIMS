@@ -83,7 +83,7 @@ export default function TimsesPage() {
     <SafeAreaView className="flex-1">
       <FocusAwareStatusBar />
       <ScrollView className="px-2">
-        <HeaderHome text="TIMS" subText="Aplikasi Tim Sukses" />
+        <HeaderHome />
         <View className="my-2">
           <Title text="Timses" />
         </View>

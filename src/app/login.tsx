@@ -34,7 +34,10 @@ export default function Login() {
       const result = await response.json();
       console.log('data response', result);
       if (response.ok) {
-        signIn({ access: result.access_token, timsesId: result.data.timses_id });
+        signIn({
+          access: result.access_token,
+          timsesId: result.data.timses_id,
+        });
         router.push('/');
       } else {
         console.error('Login failed:', result.message);

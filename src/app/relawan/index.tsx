@@ -1,9 +1,9 @@
 import { FlashList } from '@shopify/flash-list';
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { Stack } from 'expo-router';
 import * as React from 'react';
 
-import type { Pendukung } from '@/api';
-import { getPendukung } from '@/api';
+import type { TotalSuaraKecamatan } from '@/api/total-suara-kecamatan';
+import { getTotalSuaraKecamatan } from '@/api/total-suara-kecamatan';
 import { CardComponent } from '@/components/pendukung/cards-component';
 import {
   ActivityIndicator,
@@ -14,15 +14,10 @@ import {
 } from '@/ui';
 
 export default function RelawanPost() {
-  const local = useLocalSearchParams<{ id: string }>();
-
-  const { data, isPending, isError } = getPendukung({
-    //@ts-ignore
-    variables: { id: local.id },
-  });
-
+  const { data, isPending, isError } = getTotalSuaraKecamatan();
+  console.log('data kecamatan home', data);
   const renderItem = React.useCallback(
-    ({ item }: { item: Pendukung }) => <CardComponent {...item} />,
+    ({ item }: { item: TotalSuaraKecamatan }) => <CardComponent {...item} />,
     []
   );
 
@@ -31,8 +26,8 @@ export default function RelawanPost() {
       <View className="flex-1 justify-center  p-3">
         <Stack.Screen
           options={{
-            title: 'Total Relawan Setiap Kecamatan',
-            headerBackTitle: 'Total Relawan Setiap Kecamatan',
+            title: 'Total Pendukung Setiap Kecamatan',
+            headerBackTitle: 'Total Pendukung Setiap Kecamatan',
           }}
         />
         <FocusAwareStatusBar />
@@ -45,13 +40,13 @@ export default function RelawanPost() {
       <View className="flex-1 justify-center p-3">
         <Stack.Screen
           options={{
-            title: 'Total Relawan Setiap Kecamatan',
-            headerBackTitle: 'Total Relawan Setiap Kecamatan',
+            title: 'Total Pendukung Setiap Kecamatan',
+            headerBackTitle: 'Total Pendukung Setiap Kecamatan',
           }}
         />
         <FocusAwareStatusBar />
         <Text className="text-center">
-          Error loading post Total Relawan Setiap Kecamatan
+          Error loading post Total Pendukung Setiap Kecamatan
         </Text>
       </View>
     );
@@ -61,8 +56,8 @@ export default function RelawanPost() {
     <View className="flex-1 p-3 ">
       <Stack.Screen
         options={{
-          title: 'Total Relawan Setiap Kecamatan',
-          headerBackTitle: 'Total Relawan Setiap Kecamatan',
+          title: 'Total Pendukung Setiap Kecamatan',
+          headerBackTitle: 'Total Pendukung Setiap Kecamatan',
         }}
       />
       <FocusAwareStatusBar />
@@ -70,7 +65,7 @@ export default function RelawanPost() {
         data={data}
         renderItem={renderItem}
         keyExtractor={(_, index) => `item-${index}`}
-        numColumns={3}
+        numColumns={2}
         ListEmptyComponent={<EmptyList isLoading={isPending} />}
         estimatedItemSize={300}
       />

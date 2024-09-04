@@ -2,9 +2,9 @@ import { FlashList } from '@shopify/flash-list';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import * as React from 'react';
 
-import type { Pendukung } from '@/api';
-import { getPendukung } from '@/api';
-import { CardDesaComponent } from '@/components/pendukung/cards-desa-components';
+import type { getTpsDesa } from '@/api/get-tps-desa';
+import { getAllTpsDesa } from '@/api/get-tps-desa';
+import { CardTpsDesa } from '@/components/pendukung/cards-tps-desa';
 import {
   ActivityIndicator,
   EmptyList,
@@ -16,13 +16,15 @@ import {
 export default function PendukungPost() {
   const local = useLocalSearchParams<{ id: string }>();
 
-  const { data, isPending, isError } = getPendukung({
+  const { data, isPending, isError } = getAllTpsDesa({
     //@ts-ignore
     variables: { id: local.id },
   });
 
+  console.log('data tps', data);
+
   const renderItem = React.useCallback(
-    ({ item }: { item: Pendukung }) => <CardDesaComponent {...item} />,
+    ({ item }: { item: getTpsDesa }) => <CardTpsDesa {...item} />,
     []
   );
 
@@ -50,9 +52,7 @@ export default function PendukungPost() {
           }}
         />
         <FocusAwareStatusBar />
-        <Text className="text-center">
-          Error loading post Total Relawan Desa
-        </Text>
+        <Text className="text-center">Error loading post Total TPS Desa</Text>
       </View>
     );
   }
@@ -67,10 +67,10 @@ export default function PendukungPost() {
       />
       <FocusAwareStatusBar />
       <FlashList
-        data={data}
+        data={data.data}
         renderItem={renderItem}
         keyExtractor={(_, index) => `item-${index}`}
-        numColumns={3}
+        numColumns={2}
         ListEmptyComponent={<EmptyList isLoading={isPending} />}
         estimatedItemSize={300}
       />

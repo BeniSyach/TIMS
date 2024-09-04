@@ -19,8 +19,14 @@ export default function TimsesPage() {
   const [data, setData] = useState<Timses[]>([]);
   const [hasMoreData, setHasMoreData] = useState(true);
 
-  const { data: fecthed, isPending, isError, isFetching, refetch } = getTimses({
-    variables: { page, limit:10 },
+  const {
+    data: fecthed,
+    isPending,
+    isError,
+    isFetching,
+    refetch,
+  } = getTimses({
+    variables: { page, limit: 10 },
   });
 
   useEffect(() => {
@@ -28,7 +34,8 @@ export default function TimsesPage() {
       setData((prevData) => {
         const newData = [...prevData, ...fecthed.data];
         const uniqueData = newData.filter(
-          (item, index, self) => index === self.findIndex((t) => t.timses_id === item.timses_id)
+          (item, index, self) =>
+            index === self.findIndex((t) => t.timses_id === item.timses_id)
         );
         return uniqueData;
       });
@@ -51,7 +58,9 @@ export default function TimsesPage() {
             setData((prevData) => {
               const combinedData = [...prevData, ...newItems];
               const uniqueData = combinedData.filter(
-                (item, index, self) => index === self.findIndex((t) => t.timses_id === item.timses_id)
+                (item, index, self) =>
+                  index ===
+                  self.findIndex((t) => t.timses_id === item.timses_id)
               );
               return uniqueData;
             });
@@ -109,7 +118,7 @@ export default function TimsesPage() {
         data={data}
         renderItem={renderItem}
         keyExtractor={(_, index) => `item-${index}`}
-        numColumns={3}
+        numColumns={2}
         ListEmptyComponent={<EmptyList isLoading={isPending} />}
         estimatedItemSize={300}
         refreshing={isFetching}

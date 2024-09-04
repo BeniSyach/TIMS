@@ -59,23 +59,29 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
     [
-      'app-icon-badge',
+      "expo-document-picker",
       {
-        enabled: Env.APP_ENV !== 'production',
-        badges: [
-          {
-            text: Env.APP_ENV,
-            type: 'banner',
-            color: 'white',
-          },
-          {
-            text: Env.VERSION.toString(),
-            type: 'ribbon',
-            color: 'white',
-          },
-        ],
-      },
-    ],
+        "iCloudContainerEnvironment": "Production"
+      }
+    ]
+    // [
+    //   'app-icon-badge',
+    //   {
+    //     enabled: Env.APP_ENV !== 'production',
+    //     badges: [
+    //       {
+    //         text: Env.APP_ENV,
+    //         type: 'banner',
+    //         color: 'white',
+    //       },
+    //       {
+    //         text: Env.VERSION.toString(),
+    //         type: 'ribbon',
+    //         color: 'white',
+    //       },
+    //     ],
+    //   },
+    // ],
   ],
   extra: {
     ...ClientEnv,
