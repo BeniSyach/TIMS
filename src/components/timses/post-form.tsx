@@ -1,22 +1,18 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import React from 'react';
+import React, { useEffect } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-
 import { getAllDesa } from '@/api/desa';
 import { getAllKecamatan } from '@/api/kecamatan';
 import type { Option } from '@/ui';
 import { Button, ControlledInput, Select, View } from '@/ui';
+import Voice, { SpeechResultsEvent } from '@react-native-voice/voice';
+import { Alert } from 'react-native';
 
 const schema = z.object({
   name: z.string({ required_error: 'Nama Lengkap Tidak Boleh Kosong' }),
   nik: z.string({ required_error: 'Nik Tidak Boleh Kosong' }).min(16),
-  email: z
-    .string({
-      required_error: 'Email Tidak Boleh Kosong',
-    })
-    .email('Harus Format Email'),
   address: z.string({ required_error: 'Alamat Tidak Boleh Kosong' }),
   tps: z.string({ required_error: 'TPS Tidak Boleh Kosong' }),
   phone: z.string({ required_error: 'No Hp Tidak Boleh Kosong' }),
@@ -35,7 +31,10 @@ export const PostPendukung = ({
   onSubmit = () => {},
   loading,
 }: PendukungFormProps) => {
-  const { handleSubmit, control, setValue } = useForm<FormType>({
+
+  const [isListening, setIsListening] = React.useState<boolean>(false);
+  const [activeInput, setActiveInput] = React.useState('');
+  const { handleSubmit, control, setValue, reset } = useForm<FormType>({
     resolver: zodResolver(schema),
   });
 
@@ -67,6 +66,54 @@ export const PostPendukung = ({
       label: desa.name,
     })) || [];
 
+    useEffect(() => {
+      Voice.onSpeechResults = onSpeechResults;
+  
+      return () => {
+        Voice.destroy().then(Voice.removeAllListeners);
+      };
+    }, [activeInput]);
+
+    const onSpeechResults = (event: SpeechResultsEvent) => {
+      if (event.value && event.value.length > 0) {
+        if(activeInput === 'name'){
+          reset({
+            name: event.value[0] || ''
+          });
+        }else if (activeInput === 'nik'){
+          reset({
+            nik: event.value[0] || ''
+          });
+        }else if (activeInput === 'address'){
+          reset({
+            address: event.value[0] || ''
+          });
+        }else if (activeInput === 'tps'){
+          reset({
+            tps: event.value[0] || ''
+          });
+        }else if (activeInput === 'phone'){
+          reset({
+            phone: event.value[0] || ''
+          });
+        }else{
+          Alert.alert('Input tidak valid', `Harap masukkan data yang benar.`);
+        }
+
+        setIsListening(false);
+      }
+    };
+  
+    const startListening = () => {
+      setIsListening(true);
+      Voice.start('id-ID'); // Menggunakan bahasa Indonesia
+    };
+  
+    const stopListening = () => {
+      Voice.stop();
+      setIsListening(false);
+    };
+
   return (
     <View className="flex-1 justify-center p-4">
       <ControlledInput
@@ -74,6 +121,7 @@ export const PostPendukung = ({
         label="Nama Lengkap"
         control={control}
         testID="name"
+        onFocus={() => setActiveInput('name')}
       />
       <ControlledInput
         name="nik"
@@ -82,19 +130,14 @@ export const PostPendukung = ({
         keyboardType="numeric"
         multiline
         testID="nik-input"
-      />
-      <ControlledInput
-        name="email"
-        label="Email"
-        control={control}
-        multiline
-        testID="email-input"
+        onFocus={() => setActiveInput('nik')}
       />
       <ControlledInput
         name="address"
         label="Alamat"
         control={control}
         testID="address"
+        onFocus={() => setActiveInput('address')}
       />
       <Select
         label="Kecamatan"
@@ -115,6 +158,7 @@ export const PostPendukung = ({
         keyboardType="numeric"
         multiline
         testID="tps-input"
+        onFocus={() => setActiveInput('tps')}
       />
       <ControlledInput
         name="phone"
@@ -123,6 +167,7 @@ export const PostPendukung = ({
         keyboardType="numeric"
         multiline
         testID="phone-input"
+        onFocus={() => setActiveInput('phone')}
       />
       <Button
         label="Tambah Data Pendukung"
@@ -130,6 +175,12 @@ export const PostPendukung = ({
         disabled={loading}
         onPress={handleSubmit(onSubmit)}
         testID="add-post-button"
+      />
+
+      <Button
+        label={isListening ? "Berhenti Mendengarkan" : "Mulai Bicara"}
+        onPress={isListening ? stopListening : startListening}
+        disabled={isListening || !activeInput}
         className="mb-10"
       />
     </View>

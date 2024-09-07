@@ -1,40 +1,79 @@
 import { FlashList } from '@shopify/flash-list';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import * as React from 'react';
-
 import type { pendukungDesa } from '@/api/get-pendukung-desa';
 import { getAllPendukungDesa } from '@/api/get-pendukung-desa';
 import { CardTpsDesaDetail } from '@/components/pendukung/detail-tps-desa';
 import {
   ActivityIndicator,
+  Button,
   EmptyList,
   FocusAwareStatusBar,
+  SafeAreaView,
   Text,
   View,
 } from '@/ui';
+import { RefreshControl } from 'react-native';
+import { useAuth } from '@/core';
 
 export default function TpsDetail() {
+  const signOut = useAuth.use.signOut();
   const { desa_kode, tps } = useLocalSearchParams();
-  console.log('data desa', desa_kode);
-  console.log('data tps', tps);
+  const [page, setPage] = React.useState(1);
+  const [data, setData] = React.useState<pendukungDesa[]>([]);
+  const [hasMoreData, setHasMoreData] = React.useState(true);
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
 
   const desaKodeStr = Array.isArray(desa_kode) ? desa_kode[0] : desa_kode;
   const tpsStr = Array.isArray(tps) ? tps[0] : tps;
 
-  const { data, isPending, isError } = getAllPendukungDesa({
-    variables: { id: desaKodeStr ?? '', tps: tpsStr ?? '' }, // Pastikan nilai bukan undefined
+  const { data: fetched, isPending, isError, isFetching, refetch } = getAllPendukungDesa({
+    variables: { id: desaKodeStr ?? '', tps: tpsStr ?? '', page, limit: 10 },
   });
 
-  console.log('data tps', data);
+  React.useEffect(() => {
+    if (fetched?.data) {
+      if (page === 1) {
+        setData(fetched.data);
+        setHasMoreData(fetched.data.length >= 10);
+      } else {
+        setData((prevData) => [...prevData, ...fetched.data]);
+        setHasMoreData(fetched.data.length >= 10);
+      }
+    }
+  }, [fetched, page]);
+
+  const handleEndReached = () => {
+    if (!isPending && !isFetching && hasMoreData) {
+      console.log('Memuat halaman:', page + 1);
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
 
   const renderItem = React.useCallback(
     ({ item }: { item: pendukungDesa }) => <CardTpsDesaDetail {...item} />,
     []
   );
 
-  if (isPending) {
+  const onRefresh = React.useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      const result = await refetch();
+      if (result.data?.data) {
+        setData(result.data.data);
+        setPage(1);
+        setHasMoreData(result.data.data.length >= 10);
+      }
+    } catch (error) {
+      console.error('Error saat refresh data:', error);
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [refetch]);
+
+  if (isPending && page === 1) {
     return (
-      <View className="flex-1 justify-center  p-3">
+      <View className="flex-1 justify-center p-3">
         <Stack.Screen
           options={{
             title: 'Total Relawan Desa',
@@ -46,6 +85,7 @@ export default function TpsDetail() {
       </View>
     );
   }
+
   if (isError) {
     return (
       <View className="flex-1 justify-center p-3">
@@ -57,27 +97,40 @@ export default function TpsDetail() {
         />
         <FocusAwareStatusBar />
         <Text className="text-center">Error loading post Total TPS Desa</Text>
+        <Button
+          label="Sign Out"
+          onPress={signOut}
+          className="mt-4"
+          variant="blue"
+        />
       </View>
     );
   }
 
   return (
-    <View className="flex-1 p-3 ">
+    <View className="flex-1 px-2">
+      <FocusAwareStatusBar />
       <Stack.Screen
         options={{
           title: 'Total Relawan Desa',
           headerBackTitle: 'Total Relawan Desa',
         }}
       />
-      <FocusAwareStatusBar />
+ 
       <FlashList
-        data={data.data}
+        data={data}
         renderItem={renderItem}
         keyExtractor={(_, index) => `item-${index}`}
         numColumns={1}
         ListEmptyComponent={<EmptyList isLoading={isPending} />}
         estimatedItemSize={300}
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={0.5}
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+        }
       />
+
     </View>
   );
 }

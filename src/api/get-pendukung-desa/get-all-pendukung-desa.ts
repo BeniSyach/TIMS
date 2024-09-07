@@ -4,7 +4,7 @@ import { createQuery } from 'react-query-kit';
 import { client } from '../common';
 import type { pendukungDesa } from './types';
 
-type Variables = { id: string; tps: string };
+type Variables = { id: string; tps: string, page: number; limit: number };
 
 interface ApiResponse {
   data: pendukungDesa[];
@@ -22,10 +22,10 @@ export const getAllPendukungDesa = createQuery<
     try {
       console.log(
         'url',
-        `/api/v1/timses/tps/get-total-pendukung-by-tps/${variables.id}/${variables.tps}`
+        `/api/v1/timses/tps/get-total-pendukung-by-tps/${variables.id}/${variables.tps}?page=${variables.page}&limit=${variables.limit}`
       );
       const response = await client.post<ApiResponse>(
-        `/api/v1/timses/tps/get-total-pendukung-by-tps/${variables.id}/${variables.tps}`
+        `/api/v1/timses/tps/get-total-pendukung-by-tps/${variables.id}/${variables.tps}?page=${variables.page}&limit=${variables.limit}`
       );
       return response.data; // Mengambil data dari respons
     } catch (error) {

@@ -23,8 +23,8 @@ const TotalSuara: React.FC<Props> = ({ data }) => {
     <>
       <Title text="Total Suara" />
       <TouchableOpacity onPress={() => present()} style={{ width: '100%' }}>
-        <Border>
-          <View className="relative h-8 w-full bg-neutral-300">
+        <Border className=''>
+          <View className="relative h-8 w-full bg-neutral-300 rounded-xl">
             {/* Blue bar showing the percentage */}
             <View
               className="absolute left-0 top-0 h-full bg-blue-500"

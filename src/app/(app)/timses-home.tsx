@@ -1,58 +1,71 @@
 import { FlashList } from '@shopify/flash-list';
-import { Stack, useLocalSearchParams } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
-import type { PendukungTimses } from '@/api/get-pendukung-timses';
-import { getPendukungTimses } from '@/api/get-pendukung-timses';
-import { CardPendukungTimses } from '@/components/timses/card-detail-pendukung';
+import React, { useEffect, useState, useCallback } from 'react';
+import type { Timses } from '@/api';
+import { getTimses } from '@/api';
+import { HeaderHome } from '@/components/header-home';
+import { CardTimses } from '@/components/timses/card';
+import { Title } from '@/components/title';
 import {
   ActivityIndicator,
+  Button,
   EmptyList,
   FocusAwareStatusBar,
+  Input,
+  SafeAreaView,
   Text,
   View,
-  Button
 } from '@/ui';
 import { RefreshControl } from 'react-native';
 import { useAuth } from '@/core';
 
-export default function PendukungPage() {
+export default function TimsesPage() {
   const signOut = useAuth.use.signOut();
-  const local = useLocalSearchParams<{ id: string }>();
   const [page, setPage] = useState(1);
-  const [data, setData] = useState<PendukungTimses[]>([]);
+  const [data, setData] = useState<Timses[]>([]);
   const [hasMoreData, setHasMoreData] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [input, setInput] = useState<string>('');
+  const [nama, setNama] = useState<string>('');
+  const [nik, setNik] = useState<number | string>('');
 
-  const {
-    data: fetchedData,
-    isPending,
-    isError,
-    isFetching,
-    refetch,
-  } = getPendukungTimses({
-    variables: { nik: Number(local.id), page, limit: 10 },
+  const { data: fetched, isPending, isError, isFetching, refetch } = getTimses({
+    variables: { page, limit: 10, nama: nama, nik : nik },
   });
 
-  const renderItem = React.useCallback(
-    ({ item }: { item: PendukungTimses }) => <CardPendukungTimses {...item} />,
-    []
-  );
+  console.log('data timses', fetched)
 
   useEffect(() => {
-    if (fetchedData?.data) {
+    if (fetched?.data) {
       if (page === 1) {
-        setData(fetchedData.data);
-        setHasMoreData(fetchedData.data.length >= 10); // Assumes 10 is the limit per page
+        setData(fetched.data);
+        setHasMoreData(fetched.data.length >= 10); // Assumes 10 is the limit per page
+      }else if(nama || nik){
+        setData(fetched.data);
       } else {
-        setData((prevData) => [...prevData, ...fetchedData.data]);
-        setHasMoreData(fetchedData.data.length >= 10);
+        setData((prevData) => [...prevData, ...fetched.data]);
+        setHasMoreData(fetched.data.length >= 10);
       }
     }
-  }, [fetchedData, page]);
+  }, [fetched, page]);
+
+  const handleInputChange = (text: string) => {
+    setInput(text);
+    
+    const parsedNumber = Number(text);
+    if (!isNaN(parsedNumber) && text.trim() !== '') {
+      setNik(parsedNumber);
+      setNama(''); 
+      setPage(1);
+    } else {
+      setNama(text);
+      setNik(''); 
+      setPage(1);
+    }
+  };
 
   const handleEndReached = useCallback(() => {
     if (!isPending && !isFetching && hasMoreData) {
-      console.log('Memuat halaman Data Pendukung:', page + 1);
+      console.log('Memuat halaman Timses:', page + 1);
       setPage((prevPage) => prevPage + 1); // Increment halaman
     }
   }, [isPending, isFetching, hasMoreData, page]);
@@ -73,15 +86,9 @@ export default function PendukungPage() {
     }
   }, [refetch]);
 
-  if (isPending && page === 1) {
+  if (isPending && page === 1 && !nama && !nik) {
     return (
       <View className="flex-1 justify-center p-3">
-        <Stack.Screen
-          options={{
-            title: 'Data Pendukung',
-            headerBackTitle: 'Data Pendukung',
-          }}
-        />
         <FocusAwareStatusBar />
         <ActivityIndicator />
       </View>
@@ -91,14 +98,8 @@ export default function PendukungPage() {
   if (isError) {
     return (
       <View className="flex-1 justify-center p-3">
-        <Stack.Screen
-          options={{
-            title: 'Data Pendukung',
-            headerBackTitle: 'Data Pendukung',
-          }}
-        />
         <FocusAwareStatusBar />
-        <Text className="text-center">Error Mengambil Data Pendukung</Text>
+        <Text className="text-center">Error loading Timses</Text>
         <Button
           label="Sign Out"
           onPress={signOut}
@@ -110,29 +111,32 @@ export default function PendukungPage() {
   }
 
   return (
-    <View className="flex-1 px-2">
+    <SafeAreaView className="flex-1">
       <FocusAwareStatusBar />
-      <Stack.Screen
-        options={{
-          title: 'Data Pendukung',
-          headerBackTitle: 'Data Pendukung',
-        }}
-      />
+      <View className="h-full px-2">
+        <HeaderHome />
+        <View className="my-2">
+          <Title text="Timses" />
+        </View>
+        <Input
+            value={input}
+            onChangeText={handleInputChange}
+            placeholder="Ketikkan pencarian..."
+          />
         <FlashList
           data={data}
-          renderItem={renderItem}
+          renderItem={({ item }) => <CardTimses {...item} />}
           keyExtractor={(_, index) => `item-${index}`}
           ListEmptyComponent={<EmptyList isLoading={isPending} />}
           estimatedItemSize={300}
           numColumns={1}
-          refreshing={isFetching}
           onEndReached={handleEndReached}
           onEndReachedThreshold={0.5}
-          ListFooterComponent={isPending ? <ActivityIndicator /> : null}
           refreshControl={
             <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
           }
         />
-    </View>
+      </View>
+    </SafeAreaView>
   );
 }

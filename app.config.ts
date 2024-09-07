@@ -25,6 +25,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: Env.BUNDLE_ID,
+    buildNumber : "2"
   },
   experiments: {
     typedRoutes: true,
@@ -35,6 +36,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: '#2E3C4B',
     },
     package: Env.PACKAGE,
+    versionCode: 2
   },
   web: {
     favicon: './assets/favicon.png',
@@ -81,6 +83,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     //     ],
     //   },
     // ],
+    [
+      "expo-build-properties",
+      {
+        "android": {
+          "usesCleartextTraffic": true
+        }
+      }
+    ]
   ],
   extra: {
     ...ClientEnv,

@@ -13,11 +13,6 @@ import { Button, ControlledInput, Select, View } from '@/ui';
 const schema = z.object({
   name: z.string({ required_error: 'Nama Lengkap Tidak Boleh Kosong' }),
   nik: z.string({ required_error: 'Nik Tidak Boleh Kosong' }).min(16),
-  email: z
-    .string({
-      required_error: 'Email Tidak Boleh Kosong',
-    })
-    .email('Harus Format Email'),
   address: z.string({ required_error: 'Alamat Tidak Boleh Kosong' }),
   tps: z.string({ required_error: 'TPS Tidak Boleh Kosong' }),
   phone: z.string({ required_error: 'No Hp Tidak Boleh Kosong' }),
@@ -61,7 +56,6 @@ export const EditPendukung = ({
   React.useEffect(() => {
     if (data) {
       reset({
-        email: data.email || '',
         name: data.name || '',
         nik: data.nik.toString() || '',
         address: data.address || '',
@@ -100,13 +94,6 @@ export const EditPendukung = ({
         keyboardType="numeric"
         multiline
         testID="nik-input"
-      />
-      <ControlledInput
-        name="email"
-        label="Email"
-        control={control}
-        multiline
-        testID="email-input"
       />
       <ControlledInput
         name="address"

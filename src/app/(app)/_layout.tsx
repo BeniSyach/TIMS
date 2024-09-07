@@ -1,7 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 import { Redirect, SplashScreen, Tabs } from 'expo-router';
 import React, { useCallback, useEffect } from 'react';
-
 import { useAuth, useIsFirstTime } from '@/core';
 import { Home, UserCircle, UserGroup, Users as UsersMenu } from '@/ui/icons';
 
@@ -49,7 +48,7 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="timses"
+        name="timses-home"
         options={{
           title: 'Timses',
           headerShown: false,

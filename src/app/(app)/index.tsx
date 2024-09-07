@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import { getDataBiografi } from '@/api/biografi';
 import { getTotalSuara } from '@/api/dashboard/total-suara';
 import { AddPost } from '@/components/home/add-post';
@@ -19,31 +18,48 @@ import {
   Text,
   View,
 } from '@/ui';
+import { RefreshControl } from 'react-native';
 
 export default function Home() {
   const signOut = useAuth.use.signOut();
-  const { data, isPending, isError } = getTotalSuara();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const { data, isPending, isError, refetch } = getTotalSuara();
   const {
     data: dataBiografi,
     isPending: pendingBiografi,
     isError: errorBiografi,
+    refetch: refreshDataBiografi,
   } = getDataBiografi();
   const [selected, setSelected] = useState<string>('penduduk');
 
-  if (pendingBiografi) {
+  const onRefresh = React.useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      await refetch();
+      await refreshDataBiografi();
+    } catch (error) {
+      console.error('Error refreshing data:', error);
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [refetch, refreshDataBiografi]);
+
+  // Loading state
+  if (pendingBiografi || isPending) {
     return (
-      <View className="flex-1 justify-center  p-3">
+      <View className="flex-1 justify-center p-3">
         <FocusAwareStatusBar />
         <ActivityIndicator />
       </View>
     );
   }
 
-  if (errorBiografi) {
+  // Error state
+  if (errorBiografi || isError) {
     return (
       <View className="flex-1 justify-center p-3">
         <FocusAwareStatusBar />
-        <Text className="text-center">Error Mengambil Data Profile</Text>
+        <Text className="text-center">Error Mengambil Data</Text>
         <Button
           label="Sign Out"
           onPress={signOut}
@@ -54,33 +70,16 @@ export default function Home() {
     );
   }
 
-  if (isPending) {
-    return (
-      <View className="flex-1 justify-center  p-3">
-        <FocusAwareStatusBar />
-        <ActivityIndicator />
-      </View>
-    );
-  }
-
-  if (isError) {
-    return (
-      <View className="flex-1 justify-center p-3">
-        <FocusAwareStatusBar />
-        <Text className="text-center">Error Mengambil Data Profile</Text>
-        <Button
-          label="Sign Out"
-          onPress={signOut}
-          className="mt-4"
-          variant="blue"
-        />
-      </View>
-    );
-  }
   return (
     <SafeAreaView className="flex-1">
       <FocusAwareStatusBar />
-      <ScrollView className="px-2">
+      <ScrollView
+        className="px-2"
+        contentContainerStyle={{ flexGrow: 1 }}
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+        }
+      >
         <Header data={dataBiografi} />
         <Biografi data={dataBiografi} />
         <KategoriButton selected={selected} setSelected={setSelected} />

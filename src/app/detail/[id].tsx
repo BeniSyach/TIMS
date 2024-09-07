@@ -1,7 +1,6 @@
 import { Env } from '@env';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import React from 'react';
-
 import { getDetailPendukung } from '@/api';
 import type { PendukungFormProps } from '@/components/pendukung/edit-pendukung';
 import { EditPendukung } from '@/components/pendukung/edit-pendukung';
@@ -54,7 +53,6 @@ export default function PendukungDetail() {
             nik: Number(Fromdata.nik),
             name: Fromdata.name,
             phone: Fromdata.phone,
-            email: Fromdata.email,
             password: 'masuk123',
             kabupaten: '1207',
             kecamatan: Fromdata.kecamatan,

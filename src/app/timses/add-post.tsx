@@ -1,7 +1,6 @@
 import { Env } from '@env';
 import { Stack } from 'expo-router';
 import * as React from 'react';
-
 import type { PendukungFormProps } from '@/components/timses/post-form';
 import { PostPendukung } from '@/components/timses/post-form';
 import { Button, Modal, ScrollView, Text, useModal, View } from '@/ui';
@@ -9,6 +8,7 @@ import { Button, Modal, ScrollView, Text, useModal, View } from '@/ui';
 import { getToken } from '../../core/auth/utils';
 
 export default function AddPost() {
+
   const [loading, setLoading] = React.useState(false);
   const { ref, present, dismiss } = useModal();
   const [error, setError] = React.useState<string | null>(null);
@@ -38,7 +38,6 @@ export default function AddPost() {
             nik: data.nik,
             name: data.name,
             phone: data.phone,
-            email: data.email,
             password: 'masuk123',
             kabupaten: '1207',
             kecamatan: data.kecamatan,
@@ -68,6 +67,9 @@ export default function AddPost() {
       setLoading(false);
     }
   };
+
+
+
   return (
     <>
       <Stack.Screen
