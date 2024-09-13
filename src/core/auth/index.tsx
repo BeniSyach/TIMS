@@ -17,7 +17,7 @@ const _useAuth = create<AuthState>((set, get) => ({
   token: null,
   signIn: (token) => {
     setToken(token);
-    set({ status: 'signIn', token });
+    set({ status: 'signIn', token  });
   },
   signOut: () => {
     removeToken();

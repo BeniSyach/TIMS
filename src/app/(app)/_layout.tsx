@@ -2,10 +2,12 @@
 import { Redirect, SplashScreen, Tabs } from 'expo-router';
 import React, { useCallback, useEffect } from 'react';
 import { useAuth, useIsFirstTime } from '@/core';
-import { Home, UserCircle, UserGroup, Users as UsersMenu } from '@/ui/icons';
+import { EyeIcon, Home, UserCircle, UserGroup, Users as UsersMenu } from '@/ui/icons';
 
 export default function TabLayout() {
   const status = useAuth.use.status();
+  const token = useAuth.use.token();
+  console.log('data login', token?.role)
   const [isFirstTime] = useIsFirstTime();
   const hideSplash = useCallback(async () => {
     await SplashScreen.hideAsync();
@@ -37,6 +39,7 @@ export default function TabLayout() {
           tabBarTestID: 'home-tab',
         }}
       />
+      {token?.role}
       <Tabs.Screen
         name="pendukung"
         options={{
@@ -56,6 +59,17 @@ export default function TabLayout() {
           tabBarTestID: 'timses-tab',
         }}
       />
+
+      <Tabs.Screen
+        name="saksi"
+        options={{
+          title: 'Saksi',
+          headerShown: false,
+          tabBarIcon: ({ color }) => <EyeIcon color={color} />,
+          tabBarTestID: 'profile-tab',
+        }}
+      />
+
       <Tabs.Screen
         name="profile"
         options={{

@@ -44,7 +44,7 @@ export default function TpsDetail() {
   }, [fetched, page]);
 
   const handleEndReached = () => {
-    if (!isPending && !isFetching && hasMoreData) {
+    if (!isPending  && hasMoreData) {
       console.log('Memuat halaman:', page + 1);
       setPage((prevPage) => prevPage + 1);
     }

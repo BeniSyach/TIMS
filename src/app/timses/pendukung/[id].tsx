@@ -42,7 +42,7 @@ export default function PendukungPage() {
     if (fetchedData?.data) {
       if (page === 1) {
         setData(fetchedData.data);
-        setHasMoreData(fetchedData.data.length >= 10); // Assumes 10 is the limit per page
+        setHasMoreData(fetchedData.data.length >= 10);
       } else {
         setData((prevData) => [...prevData, ...fetchedData.data]);
         setHasMoreData(fetchedData.data.length >= 10);
@@ -51,9 +51,10 @@ export default function PendukungPage() {
   }, [fetchedData, page]);
 
   const handleEndReached = useCallback(() => {
-    if (!isPending && !isFetching && hasMoreData) {
+    // console.log('End Reached:', { isPending, isFetching, hasMoreData, page });
+    if (!isPending  && hasMoreData) {
       console.log('Memuat halaman Data Pendukung:', page + 1);
-      setPage((prevPage) => prevPage + 1); // Increment halaman
+      setPage((prevPage) => prevPage + 1); 
     }
   }, [isPending, isFetching, hasMoreData, page]);
 
@@ -62,9 +63,10 @@ export default function PendukungPage() {
     try {
       const result = await refetch();
       if (result.data?.data) {
+        // console.log('Data after refresh:', result.data.data);
         setData(result.data.data);
         setPage(1);
-        setHasMoreData(result.data.data.length >= 10); // Assumes 10 is the limit per page
+        setHasMoreData(result.data.data.length >= 10);
       }
     } catch (error) {
       console.error('Error saat refresh data:', error);
@@ -125,7 +127,6 @@ export default function PendukungPage() {
           ListEmptyComponent={<EmptyList isLoading={isPending} />}
           estimatedItemSize={300}
           numColumns={1}
-          refreshing={isFetching}
           onEndReached={handleEndReached}
           onEndReachedThreshold={0.5}
           ListFooterComponent={isPending ? <ActivityIndicator /> : null}

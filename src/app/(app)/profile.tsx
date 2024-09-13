@@ -27,11 +27,6 @@ import {
 } from '@/ui';
 
 const schema = z.object({
-  email: z
-    .string({
-      required_error: 'Email is required',
-    })
-    .email('Invalid email format'),
   name: z.string(),
   nik: z.string().min(16),
   address: z.string(),
@@ -62,7 +57,7 @@ export default function ProfilePage() {
   const [loadingPassword, setLoadingPassword] = React.useState(false);
   const { ref, present, dismiss } = useModal();
   const [error, setError] = React.useState<string | null>(null);
-  const { data: dataKec } = getAllKecamatan();
+  const { data: dataKec, isPending : isPendingKec, isError : isErrorKec } = getAllKecamatan();
   // console.log('kec', dataKec);
   // console.log('data profile', data);
   const [valueKec, setValueKec] = React.useState<string | number | undefined>();
@@ -101,7 +96,6 @@ export default function ProfilePage() {
   useEffect(() => {
     if (data) {
       reset({
-        email: data.email || '',
         name: data.name || '',
         nik: data.nik.toString() || '',
         address: data.address || '',
@@ -141,7 +135,6 @@ export default function ProfilePage() {
             nik: Number(Fromdata.nik),
             name: Fromdata.name,
             phone: Fromdata.phone,
-            email: Fromdata.email,
             kabupaten: '1207',
             kecamatan: valueKec,
             desa: valueDesa,
@@ -220,7 +213,7 @@ export default function ProfilePage() {
     }
   };
 
-  if (isPending) {
+  if (isPending && isPendingKec) {
     return (
       <View className="flex-1 justify-center  p-3">
         <FocusAwareStatusBar />
@@ -229,7 +222,7 @@ export default function ProfilePage() {
     );
   }
 
-  if (isError) {
+  if (isError && isErrorKec ) {
     return (
       <View className="flex-1 justify-center p-3">
         <FocusAwareStatusBar />
@@ -248,12 +241,6 @@ export default function ProfilePage() {
     <SafeAreaView className="flex-1">
       <FocusAwareStatusBar />
       <ScrollView className="p-4">
-        <ControlledInput
-          name="email"
-          label="Nama Lengkap"
-          control={control}
-          testID="email"
-        />
         <ControlledInput
           name="name"
           label="Nama Lengkap"

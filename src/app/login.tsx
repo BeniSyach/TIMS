@@ -38,6 +38,7 @@ export default function Login() {
         signIn({
           access: result.access_token,
           timsesId: result.data.timses_id,
+          role: data.login
         });
         router.push('/');
       } else {
