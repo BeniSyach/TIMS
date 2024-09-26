@@ -13,6 +13,10 @@ export const CardPendukung = ({
   nik,
   tps,
   aktif,
+  phone,
+  kecamatan,
+  desa,
+  address
 }: Props) => {
   return (
     <Border>
@@ -22,6 +26,10 @@ export const CardPendukung = ({
         profil={tps}
         id={pendukung_id}
         aktif={aktif}
+        hp={phone}
+        kecamatan={kecamatan}
+        desa={desa}
+        address={address}
       />
     </Border>
   );

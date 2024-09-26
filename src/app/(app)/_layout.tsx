@@ -7,7 +7,6 @@ import { EyeIcon, Home, UserCircle, UserGroup, Users as UsersMenu } from '@/ui/i
 export default function TabLayout() {
   const status = useAuth.use.status();
   const token = useAuth.use.token();
-  console.log('data login', token?.role)
   const [isFirstTime] = useIsFirstTime();
   const hideSplash = useCallback(async () => {
     await SplashScreen.hideAsync();
@@ -38,37 +37,64 @@ export default function TabLayout() {
           // headerRight: () => <CreateNewPostLink />,
           tabBarTestID: 'home-tab',
         }}
-      />
-      {token?.role}
-      <Tabs.Screen
-        name="pendukung"
-        options={{
-          title: 'Pendukung',
-          headerShown: false,
-          tabBarIcon: ({ color }) => <UsersMenu color={color} />,
-          tabBarTestID: 'pendukung-tab',
-        }}
-      />
+      /> 
 
-      <Tabs.Screen
+        {token?.role === 'Timses' ? (
+          <Tabs.Screen
+            name="pendukung"
+            options={{
+              title: 'Pendukung',
+              headerShown: false,
+              tabBarIcon: ({ color }) => <UsersMenu color={color} />,
+              tabBarTestID: 'pendukung-tab',
+            }}
+          />
+        ) : (
+          <Tabs.Screen
+          name="pendukung"
+          options={{
+            href: null,
+          }}
+        />
+        )}  
+
+        {token?.role === 'Timses' ? (
+        <Tabs.Screen
+          name="timses-home"
+          options={{
+            title: 'Timses',
+            headerShown: false,
+            tabBarIcon: ({ color }) => <UserGroup color={color} />,
+            tabBarTestID: 'timses-tab',
+          }}
+        />
+      ) : (
+        <Tabs.Screen
         name="timses-home"
         options={{
-          title: 'Timses',
-          headerShown: false,
-          tabBarIcon: ({ color }) => <UserGroup color={color} />,
-          tabBarTestID: 'timses-tab',
+          href: null,
         }}
       />
+      )} 
 
-      <Tabs.Screen
+       {token?.role === 'Saksi' ? (
+          <Tabs.Screen
+            name="saksi"
+            options={{
+              title: 'Saksi',
+              headerShown: false,
+              tabBarIcon: ({ color }) => <EyeIcon color={color} />,
+              tabBarTestID: 'profile-tab',
+            }}
+          />
+      ) : (
+        <Tabs.Screen
         name="saksi"
         options={{
-          title: 'Saksi',
-          headerShown: false,
-          tabBarIcon: ({ color }) => <EyeIcon color={color} />,
-          tabBarTestID: 'profile-tab',
+          href: null,
         }}
       />
+      )} 
 
       <Tabs.Screen
         name="profile"

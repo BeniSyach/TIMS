@@ -64,7 +64,7 @@ export default function TimsesPage() {
   };
 
   const handleEndReached = useCallback(() => {
-    if (!isPending && !isFetching && hasMoreData) {
+    if (!isPending  && hasMoreData) {
       console.log('Memuat halaman Timses:', page + 1);
       setPage((prevPage) => prevPage + 1); // Increment halaman
     }

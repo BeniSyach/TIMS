@@ -13,7 +13,7 @@ export default function AddPost() {
   const { ref, present, dismiss } = useModal();
   const [error, setError] = React.useState<string | null>(null);
   const onSubmit: PendukungFormProps['onSubmit'] = async (data) => {
-    console.log('data login', data);
+    console.log('data Tambah Pendukung', data);
     setLoading(true);
     const token = await getToken();
     if (!token?.access) {
@@ -44,6 +44,10 @@ export default function AddPost() {
             desa: data.desa,
             address: data.address,
             tps: data.tps,
+            longitude: data.longitude,
+            latitude: data.latitude,
+            unit: data.unit,
+            bantuan: data.bantuan
           }),
         }
       );

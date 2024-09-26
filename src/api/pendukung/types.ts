@@ -12,4 +12,6 @@ export type Pendukung = {
   created_by: number;
   created_at: string;
   updated_at: string;
+  unit: string,
+  bantuan: string,
 };

@@ -1,8 +1,6 @@
 import React from 'react';
-
 import type { totalSuara } from '@/api/dashboard/total-suara';
 import { Button, Modal, Text, TouchableOpacity, useModal, View } from '@/ui';
-
 import { Border } from '../border';
 import { Title } from '../title';
 
@@ -20,7 +18,7 @@ const TotalSuara: React.FC<Props> = ({ data }) => {
   const formattedSelisihPersen = selisihPersen.toFixed(1);
 
   return (
-    <>
+    <View className='mt-4'>
       <Title text="Total Suara" />
       <TouchableOpacity onPress={() => present()} style={{ width: '100%' }}>
         <Border className=''>
@@ -75,7 +73,7 @@ const TotalSuara: React.FC<Props> = ({ data }) => {
           <Button label="Tutup" variant="secondary" onPress={dismiss} />
         </View>
       </Modal>
-    </>
+    </View>
   );
 };
 

@@ -96,6 +96,20 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       {
         "photosPermission": "The app accesses your photos to let you share them with your friends."
       }
+    ],
+    [
+      "expo-media-library",
+      {
+        "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
+        "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos.",
+        "isAccessMediaLocationEnabled": true
+      }
+    ],
+    [
+      "expo-location",
+      {
+        "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+      }
     ]
   ],
   extra: {

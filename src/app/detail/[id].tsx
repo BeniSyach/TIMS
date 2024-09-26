@@ -25,6 +25,7 @@ export default function PendukungDetail() {
     //@ts-ignore
     variables: { id: local.id },
   });
+  console.log('data detail pendukung edit', data);
 
   const onSubmit: PendukungFormProps['onSubmit'] = async (Fromdata) => {
     console.log('data edit Pendukung', Fromdata);
@@ -59,6 +60,8 @@ export default function PendukungDetail() {
             desa: Fromdata.desa,
             address: Fromdata.address,
             tps: Fromdata.tps,
+            unit: Fromdata.unit,
+            bantuan: Fromdata.bantuan
           }),
         }
       );

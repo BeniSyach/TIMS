@@ -7,6 +7,7 @@ import { Alert } from 'react-native';
 import { getToken } from '@/core/auth/utils';
 import { Button, Modal, Pressable, Text, useModal, View } from '@/ui';
 import { Pencil, Trash, Users } from '@/ui/icons';
+import { AddTimses } from '@/ui/icons/add-timses';
 
 type Props = {
   text: string;
@@ -14,9 +15,13 @@ type Props = {
   profil: string;
   id: string;
   aktif: boolean;
+  hp: string;
+  kecamatan: string;
+  desa: string;
+  address: string;
 };
 
-export const PendukungHome = ({ text, subText, profil, id, aktif }: Props) => {
+export const PendukungHome = ({ text, subText, profil, id, aktif, hp, kecamatan, desa, address }: Props) => {
   const { ref, present, dismiss } = useModal();
   console.log('id', id);
   const maxLength = 40;
@@ -26,9 +31,10 @@ export const PendukungHome = ({ text, subText, profil, id, aktif }: Props) => {
   const currentScheme = colorScheme.get();
   const color = currentScheme === 'dark' ? '#FFF' : '#000';
 
-  const hapusDataPendukung = async (id: string) => {
+  const PendukungMenjadiTimses = async (nama: string, nik: number, tps: string, no_hp: string, kec: string, des: string, alamat: string) => {
     dismiss();
-    console.log('id', id);
+    console.log('nama', nama);
+    console.log('alamat', alamat);
     const token = await getToken();
     if (!token?.access) {
       console.error('Token is invalid or missing');
@@ -38,7 +44,7 @@ export const PendukungHome = ({ text, subText, profil, id, aktif }: Props) => {
     console.log('token', token.access);
     try {
       const response = await fetch(
-        `${Env.API_URL}/api/v1/timses/pendukung/update/${id}`,
+        `${Env.API_URL}/api/v1/timses/timses-mlm/create`,
         {
           method: 'POST',
           headers: {
@@ -46,7 +52,16 @@ export const PendukungHome = ({ text, subText, profil, id, aktif }: Props) => {
             Authorization: `Bearer ${token.access}`,
           },
           body: JSON.stringify({
-            aktif: false,
+            nik: nik.toString(),
+            name:nama,
+            phone: no_hp,
+            email: `${no_hp}@adil.com`,
+            password:`masuk123`,
+            kabupaten: `1207`,
+            kecamatan:kec,
+            desa: des,
+            address: alamat,
+            tps: tps
           }),
         }
       );
@@ -55,19 +70,18 @@ export const PendukungHome = ({ text, subText, profil, id, aktif }: Props) => {
       console.log('data response', result);
       if (response.ok) {
         console.log('berhasil kirim data');
-        Alert.alert('Sukses', 'Data Pendukung berhasil dinonaktifkan');
+        Alert.alert('Sukses', 'Data Pendukung berhasil Menjadi Timses');
       } else {
-        console.error('Tambah Data Pendukung failed:', result.message);
         Alert.alert(
           'Gagal',
-          `Gagal menonaktifkan data Pendukung: ${result.message}`
+          `Gagal Menjadikan Pendukung Ke Timses: ${result.message}`
         );
       }
     } catch (error) {
-      console.error('Error during Edit Data Pendukung:', error);
+      console.error('Error Menjadikan Pendukung Ke Timses:', error);
       Alert.alert(
         'Error',
-        'Terjadi kesalahan saat Menonaktifkan data Pendukung'
+        'Terjadi kesalahan Menjadikan Pendukung Ke Timses'
       );
     }
   };
@@ -95,22 +109,22 @@ export const PendukungHome = ({ text, subText, profil, id, aktif }: Props) => {
             <Pencil className="mx-2" color={color} />
           </Pressable>
         </Link>
-        <Trash color={color} onPress={() => present()} />
+        <AddTimses color={color} onPress={() => present()} />
       </View>
       <Modal
         ref={ref}
         snapPoints={['40%']}
-        title="Nonaktifkan Pendukung"
+        title="Pendukung Menjadi Timses"
         onDismiss={dismiss}
       >
         <View style={{ padding: 20 }}>
           <Text className="text-center dark:text-black">
-            Apakah Anda Yakin Menonaktifkan Pendukung Ini ?
+            Apakah Anda Yakin Menjadikan Timses Pendukung Ini ?
           </Text>
           <Button
             label="Ya"
             variant="blue"
-            onPress={() => hapusDataPendukung(id)}
+            onPress={() => PendukungMenjadiTimses(text, subText, profil, hp, kecamatan, desa, address )}
           />
           <Button label="Tutup" variant="secondary" onPress={dismiss} />
         </View>

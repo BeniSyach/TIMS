@@ -10,15 +10,17 @@ import { Button, ControlledInput, Image, Select, View } from '@/ui';
 import Voice, { SpeechResultsEvent } from '@react-native-voice/voice';
 import { Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { getAllTps } from '@/api/list-tps';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 const schema = z.object({
-  name: z.string({ required_error: 'Nama Lengkap Tidak Boleh Kosong' }),
-  nik: z.string({ required_error: 'Nik Tidak Boleh Kosong' }).min(16),
-  address: z.string({ required_error: 'Alamat Tidak Boleh Kosong' }),
   tps: z.string({ required_error: 'TPS Tidak Boleh Kosong' }),
-  phone: z.string({ required_error: 'No Hp Tidak Boleh Kosong' }),
-  kecamatan: z.string({ required_error: 'Kecamatan Tidak Boleh Kosong' }),
   desa: z.string({ required_error: 'Desa Tidak Boleh Kosong' }),
+  kecamatan: z.string({ required_error: 'Kecamatan Tidak Boleh Kosong' }),
+  suara: z.string({ required_error: 'Suara Tidak Boleh Kosong' }),
+  bukti_photo: z.string({ required_error: 'Photo Tidak Boleh Kosong' }),
+  mimeType: z.string({ required_error: 'mimeType Tidak Boleh Kosong' }),
+  name: z.string({ required_error: 'name Tidak Boleh Kosong' }),
 });
 
 export type FormType = z.infer<typeof schema>;
@@ -35,16 +37,18 @@ export const PostSaksi = ({
   const [image, setImage] = React.useState<string | null>(null);
   const [isListening, setIsListening] = React.useState<boolean>(false);
   const [activeInput, setActiveInput] = React.useState('');
-  const { handleSubmit, control, setValue, reset } = useForm<FormType>({
+  const { handleSubmit, control, setValue, reset, formState: { errors } } = useForm<FormType>({
     resolver: zodResolver(schema),
   });
-
+  console.log('kesalahan', errors)
   const [kecamatan, setKecamatan] = React.useState<
     string | number | undefined
   >();
   const [desa, setDesa] = React.useState<string | number | undefined>();
+  const [tps, setTps] = React.useState<string | number | undefined>();
 
   const { data: dataKec } = getAllKecamatan();
+  const { data: dataTps } = getAllTps();
   const { data: dataDesa } = getAllDesa({
     //@ts-ignore
     variables: { id: kecamatan },
@@ -53,7 +57,9 @@ export const PostSaksi = ({
   React.useEffect(() => {
     if (kecamatan) setValue('kecamatan', kecamatan.toString());
     if (desa) setValue('desa', desa.toString());
-  }, [kecamatan, desa, setValue]);
+    if (tps) setValue('tps', tps.toString());
+    if (image) setValue('bukti_photo', image.toString());
+  }, [kecamatan, desa, image, setValue]);
 
   const optionsKec: Option[] =
     dataKec?.data?.map((kecamatan) => ({
@@ -67,6 +73,12 @@ export const PostSaksi = ({
       label: desa.name,
     })) || [];
 
+  const optionsTps: Option[] =
+    dataTps?.data?.map((dataT) => ({
+      value: dataT.tps_master_id,
+      label: dataT.name_tps,
+    })) || [];
+
     useEffect(() => {
       Voice.onSpeechResults = onSpeechResults;
   
@@ -77,25 +89,9 @@ export const PostSaksi = ({
 
     const onSpeechResults = (event: SpeechResultsEvent) => {
       if (event.value && event.value.length > 0) {
-        if(activeInput === 'name'){
+        if(activeInput === 'suara'){
           reset({
-            name: event.value[0] || ''
-          });
-        }else if (activeInput === 'nik'){
-          reset({
-            nik: event.value[0] || ''
-          });
-        }else if (activeInput === 'address'){
-          reset({
-            address: event.value[0] || ''
-          });
-        }else if (activeInput === 'tps'){
-          reset({
-            tps: event.value[0] || ''
-          });
-        }else if (activeInput === 'phone'){
-          reset({
-            phone: event.value[0] || ''
+            suara: event.value[0] || ''
           });
         }else{
           Alert.alert('Input tidak valid', `Harap masukkan data yang benar.`);
@@ -115,19 +111,57 @@ export const PostSaksi = ({
       setIsListening(false);
     };
 
+    const getFileSize = async (uri: string) => {
+      try {
+        const response = await fetch(uri);
+        const blob = await response.blob();
+        return blob.size;
+      } catch (error) {
+        console.error('Error getting file size:', error);
+        return 0;
+      }
+    };
+
     const pickImage = async () => {
       // No permissions request is necessary for launching the image library
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
         quality: 1,
       });
   
       console.log(result);
   
       if (!result.canceled) {
-        setImage(result.assets[0].uri);
+        const imageUri = result.assets[0].uri;
+        const imagemimeType = result.assets[0].mimeType;
+        const imagename = result.assets[0].fileName;
+        setValue('mimeType', imagemimeType ?? '');
+        setValue('name', imagename ?? '');
+        let compressedImageUri = imageUri;
+        let compressedImageSize = 0;
+    
+        // Try different compression qualities until the file size is below 2 MB
+        for (let quality = 0.9; quality >= 0.1; quality -= 0.1) {
+          const compressedImage = await ImageManipulator.manipulateAsync(
+            imageUri,
+            [],
+            { compress: quality, format: ImageManipulator.SaveFormat.JPEG } // Compress and save as JPEG
+          );
+    
+          // Get the file size of the compressed image
+          compressedImageSize = await getFileSize(compressedImage.uri);
+          
+          if (compressedImageSize < 2 * 1024 * 1024) { // Check if the size is below 2 MB
+            compressedImageUri = compressedImage.uri;
+            break;
+          }
+        }
+    
+        console.log('Compressed Image URI:', compressedImageUri);
+        console.log('Compressed Image Size:', compressedImageSize);
+    
+        setImage(compressedImageUri);
+        setValue('bukti_photo', compressedImageUri);
       }
     };
 
@@ -135,9 +169,9 @@ export const PostSaksi = ({
     <View className="flex-1 justify-center p-4">
       <Select
         label="No TPS"
-        options={optionsKec}
-        value={kecamatan}
-        onSelect={(option) => setKecamatan(option)}
+        options={optionsTps}
+        value={tps}
+        onSelect={(option) => setTps(option)}
       />
       <Select
         label="Kecamatan"
@@ -152,20 +186,28 @@ export const PostSaksi = ({
         onSelect={(option) => setDesa(option)}
       />
       <ControlledInput
-        name="tps"
+        name="suara"
         label="Hasil Suara"
         control={control}
         keyboardType="numeric"
         multiline
-        testID="tps-input"
-        onFocus={() => setActiveInput('tps')}
+        testID="suara-input"
+        onFocus={() => setActiveInput('suara')}
       />
-
+      {image && (
+        <View className="items-center my-10">
+          <Image
+            source={{ uri: image }}
+            className="w-[100%] h-44"
+            style={{ resizeMode: 'contain' }} 
+          />
+        </View>
+      )}
       <Button label="Ambil Foto" onPress={pickImage} />
        {image && <Image source={{ uri: image }} />}
        
       <Button
-        label="Tambah Data Saksi"
+        label="Tambah Data Berkas Saksi"
         loading={loading}
         disabled={loading}
         onPress={handleSubmit(onSubmit)}

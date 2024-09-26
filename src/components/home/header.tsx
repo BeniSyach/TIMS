@@ -16,16 +16,18 @@ export const Header = ({ data }: Props) => {
   return (
     <>
       <HeaderHome />
-      <Border>
+      {/* <Border> */}
         {secondItem && (
           <ProfilHome
             text={secondItem.nama_lengkap}
-            subText={secondItem.jabatan}
-            profil="bupati.jpg"
+            subText={firstItem.nama_lengkap}
+            subJabatanBupText={secondItem.jabatan}
+            subJabatanWaText={firstItem.jabatan}
+            profil="paslon.png"
           />
         )}
-      </Border>
-      <Border>
+      {/* </Border> */}
+      {/* <Border>
         {firstItem && (
           <ProfilHome
             text={firstItem.nama_lengkap}
@@ -33,7 +35,7 @@ export const Header = ({ data }: Props) => {
             profil="wakilbupati.jpg"
           />
         )}
-      </Border>
+      </Border> */}
     </>
   );
 };

@@ -10,7 +10,8 @@ import {
   FocusAwareStatusBar,
   Text,
   View,
-  Button
+  Button,
+  Input
 } from '@/ui';
 import { RefreshControl } from 'react-native';
 import { useAuth } from '@/core';
@@ -22,6 +23,9 @@ export default function PendukungPage() {
   const [data, setData] = useState<PendukungTimses[]>([]);
   const [hasMoreData, setHasMoreData] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [nama, setNama] = useState<string>('');
+  const [nik, setNik] = useState<number | string>('');
+  const [input, setInput] = useState<string>('')
 
   const {
     data: fetchedData,
@@ -30,13 +34,28 @@ export default function PendukungPage() {
     isFetching,
     refetch,
   } = getPendukungTimses({
-    variables: { nik: Number(local.id), page, limit: 10 },
+    variables: { nik: Number(local.id), page, limit: 10, name : nama, nikPendukung : nik },
   });
 
   const renderItem = React.useCallback(
     ({ item }: { item: PendukungTimses }) => <CardPendukungTimses {...item} />,
     []
   );
+
+  const handleInputChange = (text: string) => {
+    setInput(text);
+    
+    const parsedNumber = Number(text);
+    if (!isNaN(parsedNumber) && text.trim() !== '') {
+      setNik(parsedNumber);
+      setNama(''); 
+      setPage(1);
+    } else {
+      setNama(text);
+      setNik(''); 
+      setPage(1);
+    }
+  };
 
   useEffect(() => {
     if (fetchedData?.data) {
@@ -75,7 +94,7 @@ export default function PendukungPage() {
     }
   }, [refetch]);
 
-  if (isPending && page === 1) {
+  if (isPending && page === 1 && !nama && !nik) {
     return (
       <View className="flex-1 justify-center p-3">
         <Stack.Screen
@@ -120,6 +139,12 @@ export default function PendukungPage() {
           headerBackTitle: 'Data Pendukung',
         }}
       />
+       <View className="h-full px-2 pt-5">
+                <Input
+            value={input}
+            onChangeText={handleInputChange}
+            placeholder="Ketikkan pencarian..."
+          />
         <FlashList
           data={data}
           renderItem={renderItem}
@@ -134,6 +159,7 @@ export default function PendukungPage() {
             <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
           }
         />
+        </View>
     </View>
   );
 }

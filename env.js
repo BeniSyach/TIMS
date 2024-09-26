@@ -79,6 +79,8 @@ const client = z.object({
 
   // ADD YOUR CLIENT ENV VARS HERE
   API_URL: z.string(),
+  API_URL_SAKSI: z.string(),
+  API_URL_BUPATI: z.string(),
   VAR_NUMBER: z.number(),
   VAR_BOOL: z.boolean(),
 });
@@ -103,6 +105,8 @@ const _clientEnv = {
 
   // ADD YOUR ENV VARS HERE TOO
   API_URL: process.env.API_URL,
+  API_URL_SAKSI: process.env.API_URL_SAKSI,
+  API_URL_BUPATI: process.env.API_URL_BUPATI,
   VAR_NUMBER: Number(process.env.VAR_NUMBER),
   VAR_BOOL: process.env.VAR_BOOL === 'true',
 };

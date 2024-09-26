@@ -8,6 +8,7 @@ import { Button, ControlledInput, Option, Select, Text, View } from '@/ui';
 const optionsLogin: Option[] = [
   { value: 'Timses', label: 'Timses' },
   { value: 'Saksi', label: 'Saksi' },
+  { value: 'Bupati', label: 'Bupati' },
 ];
 
 const schema = z.object({

@@ -31,8 +31,8 @@ export default function PendukungPost() {
       <View className="flex-1 justify-center  p-3">
         <Stack.Screen
           options={{
-            title: 'Total Relawan Desa',
-            headerBackTitle: 'Total Relawan Desa',
+            title: 'Total Pendukung Per Desa',
+            headerBackTitle: 'Total Pendukung Per Desa',
           }}
         />
         <FocusAwareStatusBar />
@@ -45,13 +45,13 @@ export default function PendukungPost() {
       <View className="flex-1 justify-center p-3">
         <Stack.Screen
           options={{
-            title: 'Total Relawan Desa',
-            headerBackTitle: 'Total Relawan Desa',
+            title: 'Total Pendukung Per Desa',
+            headerBackTitle: 'Total Pendukung Per Desa',
           }}
         />
         <FocusAwareStatusBar />
         <Text className="text-center dark:text-black">
-          Error loading post Total Relawan Desa
+          Error loading post Total Pendukung Per Desa
         </Text>
       </View>
     );
@@ -61,8 +61,8 @@ export default function PendukungPost() {
     <View className="flex-1 p-3 ">
       <Stack.Screen
         options={{
-          title: 'Total Relawan Desa',
-          headerBackTitle: 'Total Relawan Desa',
+          title: 'Total Pendukung Per Desa',
+          headerBackTitle: 'Total Pendukung Per Desa',
         }}
       />
       <FocusAwareStatusBar />

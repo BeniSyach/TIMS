@@ -9,6 +9,7 @@ import {
   Button,
   EmptyList,
   FocusAwareStatusBar,
+  Input,
   SafeAreaView,
   Text,
   View,
@@ -23,20 +24,41 @@ export default function TpsDetail() {
   const [data, setData] = React.useState<pendukungDesa[]>([]);
   const [hasMoreData, setHasMoreData] = React.useState(true);
   const [isRefreshing, setIsRefreshing] = React.useState(false);
+  const [nama, setNama] = React.useState<string>('');
+  const [nik, setNik] = React.useState<number | string>('');
+  const [input, setInput] = React.useState<string>('');
 
   const desaKodeStr = Array.isArray(desa_kode) ? desa_kode[0] : desa_kode;
   const tpsStr = Array.isArray(tps) ? tps[0] : tps;
 
   const { data: fetched, isPending, isError, isFetching, refetch } = getAllPendukungDesa({
-    variables: { id: desaKodeStr ?? '', tps: tpsStr ?? '', page, limit: 10 },
+    variables: { id: desaKodeStr ?? '', tps: tpsStr ?? '', page, limit: 10, name : nama, nik },
   });
+
+  const handleInputChange = (text: string) => {
+    setInput(text);
+    
+    const parsedNumber = Number(text);
+    if (!isNaN(parsedNumber) && text.trim() !== '') {
+      setNik(parsedNumber);
+      setNama(''); 
+      setPage(1);
+    } else {
+      setNama(text);
+      setNik(''); 
+      setPage(1);
+    }
+  };
 
   React.useEffect(() => {
     if (fetched?.data) {
       if (page === 1) {
         setData(fetched.data);
         setHasMoreData(fetched.data.length >= 10);
-      } else {
+      } else if(nama || nik){
+        setData(fetched.data);
+        setHasMoreData(fetched.data.length >= 10);
+      }  else {
         setData((prevData) => [...prevData, ...fetched.data]);
         setHasMoreData(fetched.data.length >= 10);
       }
@@ -71,13 +93,13 @@ export default function TpsDetail() {
     }
   }, [refetch]);
 
-  if (isPending && page === 1) {
+  if (isPending && page === 1 && !nama && !nik) {
     return (
       <View className="flex-1 justify-center p-3">
         <Stack.Screen
           options={{
-            title: 'Total Relawan Desa',
-            headerBackTitle: 'Total Relawan Desa',
+            title: 'Data Pendukung Desa',
+            headerBackTitle: 'Data Pendukung Desa',
           }}
         />
         <FocusAwareStatusBar />
@@ -91,8 +113,8 @@ export default function TpsDetail() {
       <View className="flex-1 justify-center p-3">
         <Stack.Screen
           options={{
-            title: 'Total Relawan Desa',
-            headerBackTitle: 'Total Relawan Desa',
+            title: 'Data Pendukung Desa',
+            headerBackTitle: 'Data Pendukung Desa',
           }}
         />
         <FocusAwareStatusBar />
@@ -112,11 +134,16 @@ export default function TpsDetail() {
       <FocusAwareStatusBar />
       <Stack.Screen
         options={{
-          title: 'Total Relawan Desa',
-          headerBackTitle: 'Total Relawan Desa',
+          title: 'Data Pendukung Desa',
+          headerBackTitle: 'Data Pendukung Desa',
         }}
       />
- 
+      <View className="h-full px-2 pt-5">
+                <Input
+            value={input}
+            onChangeText={handleInputChange}
+            placeholder="Ketikkan pencarian..."
+          />
       <FlashList
         data={data}
         renderItem={renderItem}
@@ -130,7 +157,7 @@ export default function TpsDetail() {
           <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
         }
       />
-
+      </View>
     </View>
   );
 }

@@ -30,7 +30,7 @@ const schema = z.object({
   name: z.string(),
   nik: z.string().min(16),
   address: z.string(),
-  phone: z.string(),
+  phone: z.string()
 });
 
 const schemaPassword = z.object({
@@ -38,7 +38,17 @@ const schemaPassword = z.object({
     .string({
       required_error: 'Password is required',
     })
-    .min(6, 'Password must be at least 6 characters'),
+    .min(6, 'Password must be at least 6 characters').optional(),
+    passwordLama:  z
+    .string({
+      required_error: 'Password is required',
+    })
+    .min(6, 'Password must be at least 6 characters').optional(),
+    passwordBaru: z
+    .string({
+      required_error: 'Password is required',
+    })
+    .min(6, 'Password must be at least 6 characters').optional(),
 });
 
 type FormType = z.infer<typeof schema>;
@@ -52,7 +62,9 @@ const options: Option[] = [
 
 export default function ProfilePage() {
   const signOut = useAuth.use.signOut();
-  const { data, isError, isPending } = getDetailTimses();
+  const token = useAuth.use.token();
+  const { data, isError, isPending, refetch } = getDetailTimses();
+  console.log('data profile', data);
   const [loading, setLoading] = React.useState(false);
   const [loadingPassword, setLoadingPassword] = React.useState(false);
   const { ref, present, dismiss } = useModal();
@@ -76,10 +88,12 @@ export default function ProfilePage() {
     resolver: zodResolver(schema),
   });
 
-  const { control: controlPassword, handleSubmit: handleSubmitPassword } =
+  const { control: controlPassword, handleSubmit: handleSubmitPassword, formState: { errors } } =
     useForm<FormTypePassword>({
       resolver: zodResolver(schemaPassword),
     });
+
+    console.log('salah password', errors);
 
   const optionsKec: Option[] =
     dataKec?.data?.map((kecamatan) => ({
@@ -93,19 +107,29 @@ export default function ProfilePage() {
       label: desa.name,
     })) || [];
 
-  useEffect(() => {
-    if (data) {
-      reset({
-        name: data.name || '',
-        nik: data.nik.toString() || '',
-        address: data.address || '',
-        phone: data.phone || '',
-      });
-      setValueKec(data.kecamatan);
-      setValueDesa(data.desa);
-      setValueStatus(data.aktif.toString());
-    }
-  }, [data, reset]);
+    useEffect(() => {
+      // Refetch the data when the component mounts
+      refetch();
+    }, [refetch]);
+  
+    useEffect(() => {
+      if (!isPending && data) {
+        // Process the data only if not pending and data is available
+        reset({
+          name: data.name || '',
+          nik: data.nik.toString() || '',
+          address: data.address || '',
+          phone: data.phone || '',
+        });
+        setValueKec(data.kecamatan);
+        setValueDesa(data.desa);
+        if (token?.role === 'Saksi') {
+          setValueStatus('');
+        } else {
+          setValueStatus('');
+        }
+      }
+    }, [data, isPending, reset]);
 
   const onSubmit = async (Fromdata: FormType) => {
     console.log('data yang akan diedit', Fromdata);
@@ -177,9 +201,25 @@ export default function ProfilePage() {
     }
 
     console.log('token', token.access);
-
+    let response;
     try {
-      const response = await fetch(
+    if(token?.role === 'Saksi'){
+      response = await fetch(
+        `${Env.API_URL_SAKSI}/api/v1/saksi/profil/update`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token.access}`,
+          },
+          body: JSON.stringify({
+            password_lama: FromdataPassword.passwordLama,
+            password_baru: FromdataPassword.passwordBaru,
+          }),
+        }
+      );
+    }else{
+      response = await fetch(
         `${Env.API_URL}/api/v1/timses/timses-mlm/update-password`,
         {
           method: 'POST',
@@ -192,6 +232,9 @@ export default function ProfilePage() {
           }),
         }
       );
+    }
+
+
 
       const result = await response.json();
       console.log('data response', result);
@@ -260,18 +303,22 @@ export default function ProfilePage() {
           control={control}
           testID="address"
         />
+        {token?.role !== 'Bupati' && (
         <Select
           label="Kecamatan"
           options={optionsKec}
           value={valueKec}
           onSelect={(option) => setValueKec(option)}
         />
+      )}
+       {token?.role !== 'Bupati' && (
         <Select
           label="Desa"
           options={optionsDesa}
           value={valueDesa}
           onSelect={(option) => setValueDesa(option)}
         />
+      )}
         <ControlledInput
           name="phone"
           label="No. Hp"
@@ -280,12 +327,15 @@ export default function ProfilePage() {
           multiline
           testID="phone-input"
         />
+        {token?.role === 'Timses' && (
         <Select
-          label="Status"
-          options={options}
-          value={valueStatus}
-          onSelect={(option) => setValueStatus(option)}
-        />
+        label="Status"
+        options={options}
+        value={valueStatus}
+        onSelect={(option) => setValueStatus(option)}
+      />
+        )}
+      {token?.role === 'Timses' && (
         <Button
           label="Edit Data"
           loading={loading}
@@ -294,16 +344,40 @@ export default function ProfilePage() {
           className="mb-10"
           variant="blue"
         />
+      )}
 
+      {token?.role === 'Timses' && (
         <ControlledInput
           name="password"
-          label="Password"
+          label="Password Lama"
           control={controlPassword}
           placeholder="*******"
           secureTextEntry={true}
-          testID="password-input"
+          testID="password-lama-input"
         />
+      )}
 
+      {token?.role === 'Saksi' && (
+        <ControlledInput
+          name="passwordLama"
+          label="Password Lama"
+          control={controlPassword}
+          placeholder="*******"
+          secureTextEntry={true}
+          testID="password-lama-input"
+        />
+      )}
+      {token?.role === 'Saksi' && (
+        <ControlledInput
+          name="passwordBaru"
+          label="Password Baru"
+          control={controlPassword}
+          placeholder="*******"
+          secureTextEntry={true}
+          testID="password-baru-input"
+        />
+      )}
+        {token?.role !== 'Bupati' && (
         <Button
           label="Edit Password"
           loading={loadingPassword}
@@ -312,13 +386,14 @@ export default function ProfilePage() {
           className="mb-10"
           variant="blue"
         />
-
+      )}
         <View className="my-8">
           <ItemsContainer>
             <Item text="settings.logout" onPress={signOut} />
           </ItemsContainer>
         </View>
       </ScrollView>
+      
       <Modal
         ref={ref}
         snapPoints={['40%']}

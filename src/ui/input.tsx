@@ -10,7 +10,6 @@ import type { TextInput, TextInputProps } from 'react-native';
 import { I18nManager, StyleSheet, View } from 'react-native';
 import { TextInput as NTextInput } from 'react-native';
 import { tv } from 'tailwind-variants';
-
 import colors from './colors';
 import { Text } from './text';
 
@@ -109,6 +108,7 @@ export const Input = React.forwardRef<TextInput, NInputProps>((props, ref) => {
           inputProps.style,
         ])}
       />
+      
       {error && (
         <Text
           testID={testID ? `${testID}-error` : undefined}

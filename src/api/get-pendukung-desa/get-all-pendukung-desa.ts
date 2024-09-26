@@ -4,7 +4,7 @@ import { createQuery } from 'react-query-kit';
 import { client } from '../common';
 import type { pendukungDesa } from './types';
 
-type Variables = { id: string; tps: string, page: number; limit: number };
+type Variables = { id: string; tps: string, page: number; limit: number, nik: number | string, name: string };
 
 interface ApiResponse {
   data: pendukungDesa[];
@@ -20,14 +20,25 @@ export const getAllPendukungDesa = createQuery<
   queryKey: ['pendukungDesa'],
   fetcher: async (variables) => {
     try {
-      console.log(
-        'url',
-        `/api/v1/timses/tps/get-total-pendukung-by-tps/${variables.id}/${variables.tps}?page=${variables.page}&limit=${variables.limit}`
-      );
-      const response = await client.post<ApiResponse>(
-        `/api/v1/timses/tps/get-total-pendukung-by-tps/${variables.id}/${variables.tps}?page=${variables.page}&limit=${variables.limit}`
-      );
-      return response.data; // Mengambil data dari respons
+      let response
+      if(variables.nik || variables.name){
+        console.log(
+          'url',
+          `/api/v1/timses/tps/get-total-pendukung-by-tps/${variables.id}/${variables.tps}?page=${variables.page}&limit=${variables.limit}`
+        );
+        response = await client.post<ApiResponse>(
+          `/api/v1/timses/tps/get-total-pendukung-by-tps/${variables.id}/${variables.tps}?name=${variables.name}&nik=${variables.nik}`
+        );
+      }else{
+        console.log(
+          'url',
+          `/api/v1/timses/tps/get-total-pendukung-by-tps/${variables.id}/${variables.tps}?page=${variables.page}&limit=${variables.limit}`
+        );
+        response = await client.post<ApiResponse>(
+          `/api/v1/timses/tps/get-total-pendukung-by-tps/${variables.id}/${variables.tps}?page=${variables.page}&limit=${variables.limit}`
+        );
+      }
+      return response.data;
     } catch (error) {
       console.error('Error fetching Pendukung Desa data:', error);
       throw error;

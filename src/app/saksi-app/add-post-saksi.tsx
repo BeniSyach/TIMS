@@ -1,11 +1,9 @@
 import { Env } from '@env';
 import { Stack } from 'expo-router';
 import * as React from 'react';
-import type { PendukungFormProps } from '@/components/timses/post-form';
 import { Button, Modal, ScrollView, Text, useModal, View } from '@/ui';
-
 import { getToken } from '../../core/auth/utils';
-import { PostSaksi } from '@/components/saksi/post-form-saksi';
+import { PostSaksi, SaksiFormProps } from '@/components/saksi/post-form-saksi';
 
 export default function AddPostSaksi() {
 
@@ -13,7 +11,7 @@ export default function AddPostSaksi() {
   const { ref, present, dismiss } = useModal();
   const [error, setError] = React.useState<string | null>(null);
 
-  const onSubmit: PendukungFormProps['onSubmit'] = async (data) => {
+  const onSubmit: SaksiFormProps['onSubmit'] = async (data) => {
     console.log('data login', data);
     setLoading(true);
     const token = await getToken();
@@ -24,28 +22,26 @@ export default function AddPostSaksi() {
       setLoading(false);
       return;
     }
-
     console.log('token', token.access);
+    const formData = new FormData();
+    formData.append('tps', data.tps);
+    formData.append('desa', data.desa);
+    formData.append('kecamatan', data.kecamatan);
+    formData.append('suara', data.suara);
+    formData.append('bukti_photo', {
+      uri: data.bukti_photo,
+      type: data.mimeType,
+      name: data.name,
+    } as any);
     try {
       const response = await fetch(
-        `${Env.API_URL}/api/v1/timses/pendukung/create`,
+        `${Env.API_URL_SAKSI}/api/v1/saksi/dokumen/upload`,
         {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
             Authorization: `Bearer ${token.access}`,
           },
-          body: JSON.stringify({
-            nik: data.nik,
-            name: data.name,
-            phone: data.phone,
-            password: 'masuk123',
-            kabupaten: '1207',
-            kecamatan: data.kecamatan,
-            desa: data.desa,
-            address: data.address,
-            tps: data.tps,
-          }),
+          body: formData,
         }
       );
 
@@ -53,16 +49,16 @@ export default function AddPostSaksi() {
       console.log('data response', result);
       if (response.ok) {
         console.log('berhasil kirim data');
-        setError('Berhasil Tambah Data Pendukung');
+        setError('Berhasil Tambah Data');
         present();
       } else {
-        console.error('Tambah Data Pendukung failed:', result.message);
+        console.error('Tambah Data berkas saksi failed:', result.message);
         setError(result.message);
         present();
       }
     } catch (error) {
-      console.error('Error during Tambah Data Pendukung:', error);
-      setError('Gagal Tambah Data Pendukung');
+      console.error('Error during Tambah Data:', error);
+      setError('Gagal Tambah Data');
       present();
     } finally {
       setLoading(false);
@@ -83,7 +79,7 @@ export default function AddPostSaksi() {
       <Modal
         ref={ref}
         snapPoints={['40%']}
-        title="Error Saksi"
+        title="Error Tambah Berkas Saksi"
         onDismiss={dismiss}
       >
         <View style={{ padding: 20 }}>

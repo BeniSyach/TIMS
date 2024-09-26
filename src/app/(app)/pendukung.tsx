@@ -137,7 +137,7 @@ export default function PendukungPage() {
   const renderItem = useCallback(({ item }: { item: Pendukung }) => <CardPendukung {...item} />, []);
 
   const handleEndReached = () => {
-    if (!isPending && !isFetching && hasMoreData) {
+    if (!isPending && hasMoreData) {
       console.log('Memuat halaman Pendukung:', page + 1);
       setPage((prevPage) => prevPage + 1); 
     }
@@ -226,7 +226,7 @@ export default function PendukungPage() {
                   <Text className="mt-1 text-white">Import</Text>
                 </View>
               </Pressable>
-              <Pressable
+              {/* <Pressable
                 onPress={() => handleOptionPress('Export')}
                 className="rounded-full bg-green-500 p-3"
               >
@@ -234,7 +234,7 @@ export default function PendukungPage() {
                   <Export color="white" />
                   <Text className="text-white">Export</Text>
                 </View>
-              </Pressable>
+              </Pressable> */}
             </View>
           )}
         </View>

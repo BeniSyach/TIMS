@@ -21,6 +21,7 @@ import {
 import { RefreshControl } from 'react-native';
 
 export default function Home() {
+  const token = useAuth.use.token();
   const signOut = useAuth.use.signOut();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { data, isPending, isError, refetch } = getTotalSuara();
@@ -82,11 +83,21 @@ export default function Home() {
       >
         <Header data={dataBiografi} />
         <Biografi data={dataBiografi} />
+
+        {token?.role !== 'Saksi' && (
         <KategoriButton selected={selected} setSelected={setSelected} />
-        <Statistics selected={selected} data={data} />
+        )}
+
+        {token?.role !== 'Saksi' && (
+          <Statistics selected={selected} data={data} />
+        )}
+        
         <TotalSuara data={data} />
+
         <Summary data={data} />
-        <AddPost />
+        {token?.role === 'Timses' && (
+          <AddPost />
+        )}
       </ScrollView>
     </SafeAreaView>
   );

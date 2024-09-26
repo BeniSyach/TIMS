@@ -20,39 +20,115 @@ export default function Login() {
     console.log('data login', data);
     setLoading(true);
     console.log('url login', Env.API_URL);
-    try {
-      const response = await fetch(`${Env.API_URL}/api/v1/timses/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: data.email,
-          password: data.password,
-        }),
-      });
-
-      const result = await response.json();
-      console.log('data response', result);
-      if (response.ok) {
-        signIn({
-          access: result.access_token,
-          timsesId: result.data.timses_id,
-          role: data.login
+    console.log('url login', Env.API_URL_SAKSI);
+    if (data.login === 'Timses'){
+      try {
+        const response = await fetch(`${Env.API_URL}/api/v1/timses/auth/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: data.email,
+            password: data.password,
+          }),
         });
-        router.push('/');
-      } else {
-        console.error('Login failed:', result.message);
-        setError(result.message);
+  
+        const result = await response.json();
+        console.log('data response', result);
+        if (response.ok) {
+          signIn({
+            access: result.access_token,
+            timsesId: result.data.timses_id,
+            role: data.login
+          });
+          router.push('/');
+        } else {
+          console.error('Login failed:', result.message);
+          setError(result.message);
+          present();
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+        setError('Error Server');
         present();
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error('Error during login:', error);
-      setError('Error Server');
-      present();
-    } finally {
-      setLoading(false);
     }
+
+    if (data.login === 'Bupati'){
+      try {
+        const response = await fetch(`${Env.API_URL_BUPATI}/api/v1/auth/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: data.email,
+            password: data.password,
+          }),
+        });
+  
+        const result = await response.json();
+        console.log('data response', result);
+        if (response.ok) {
+          signIn({
+            access: result.access_token,
+            timsesId: result.data.bupati_id,
+            role: data.login
+          });
+          router.push('/');
+        } else {
+          console.error('Login failed:', result.message);
+          setError(result.message);
+          present();
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+        setError('Error Server');
+        present();
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if(data.login === 'Saksi'){
+      try {
+        const response = await fetch(`${Env.API_URL_SAKSI}/api/v1/saksi/auth/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: data.email,
+            password: data.password,
+          }),
+        });
+  
+        const result = await response.json();
+        console.log('data response', result);
+        if (response.ok) {
+          signIn({
+            access: result.access_token,
+            timsesId: result.data.saksi_id,
+            role: data.login
+          });
+          router.push('/');
+        } else {
+          console.error('Login failed:', result.message);
+          setError(result.message);
+          present();
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+        setError('Error Server');
+        present();
+      } finally {
+        setLoading(false);
+      }
+    }
+
   };
 
   return (
