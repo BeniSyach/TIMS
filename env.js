@@ -36,8 +36,8 @@ require('dotenv').config({
 const BUNDLE_ID = 'com.tims'; // ios bundle id
 const PACKAGE = 'com.tims'; // android package name
 const NAME = 'TIMS'; // app name
-const EXPO_ACCOUNT_OWNER = 'expo-owner'; // expo account owner
-const EAS_PROJECT_ID = 'c3e1075b-6fe7-4686-aa49-35b46a229044'; // eas project id
+const EXPO_ACCOUNT_OWNER = 'benisyach'; // expo account owner
+const EAS_PROJECT_ID = '118d722b-f035-4857-93dc-466381b53e1c'; // eas project id
 const SCHEME = 'TIMS'; // app scheme
 
 /**
@@ -79,6 +79,8 @@ const client = z.object({
 
   // ADD YOUR CLIENT ENV VARS HERE
   API_URL: z.string(),
+  API_URL_SAKSI: z.string(),
+  API_URL_BUPATI: z.string(),
   VAR_NUMBER: z.number(),
   VAR_BOOL: z.boolean(),
 });
@@ -103,6 +105,8 @@ const _clientEnv = {
 
   // ADD YOUR ENV VARS HERE TOO
   API_URL: process.env.API_URL,
+  API_URL_SAKSI: process.env.API_URL_SAKSI,
+  API_URL_BUPATI: process.env.API_URL_BUPATI,
   VAR_NUMBER: Number(process.env.VAR_NUMBER),
   VAR_BOOL: process.env.VAR_BOOL === 'true',
 };

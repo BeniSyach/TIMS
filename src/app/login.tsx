@@ -19,35 +19,116 @@ export default function Login() {
   const onSubmit: LoginFormProps['onSubmit'] = async (data) => {
     console.log('data login', data);
     setLoading(true);
-    try {
-      const response = await fetch(`${Env.API_URL}/api/v1/timses/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: data.email,
-          password: data.password,
-        }),
-      });
-
-      const result = await response.json();
-      console.log('data response', result);
-      if (response.ok) {
-        signIn({ access: result.access_token, timsesId: result.data.timses_id });
-        router.push('/');
-      } else {
-        console.error('Login failed:', result.message);
-        setError(result.message);
+    console.log('url login', Env.API_URL);
+    console.log('url login', Env.API_URL_SAKSI);
+    if (data.login === 'Timses'){
+      try {
+        const response = await fetch(`${Env.API_URL}/api/v1/timses/auth/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: data.email,
+            password: data.password,
+          }),
+        });
+  
+        const result = await response.json();
+        console.log('data response', result);
+        if (response.ok) {
+          signIn({
+            access: result.access_token,
+            timsesId: result.data.timses_id,
+            role: data.login
+          });
+          router.push('/');
+        } else {
+          console.error('Login failed:', result.message);
+          setError(result.message);
+          present();
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+        setError('Error Server');
         present();
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error('Error during login:', error);
-      setError('Error Server');
-      present();
-    } finally {
-      setLoading(false);
     }
+
+    if (data.login === 'Bupati'){
+      try {
+        const response = await fetch(`${Env.API_URL_BUPATI}/api/v1/bupati/auth/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: data.email,
+            password: data.password,
+          }),
+        });
+  
+        const result = await response.json();
+        console.log('data response', result);
+        if (response.ok) {
+          signIn({
+            access: result.access_token,
+            timsesId: result.data.bupati_id,
+            role: data.login
+          });
+          router.push('/');
+        } else {
+          console.error('Login failed:', result.message);
+          setError(result.message);
+          present();
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+        setError('Error Server');
+        present();
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if(data.login === 'Saksi'){
+      try {
+        const response = await fetch(`${Env.API_URL_SAKSI}/api/v1/saksi/auth/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: data.email,
+            password: data.password,
+          }),
+        });
+  
+        const result = await response.json();
+        console.log('data response', result);
+        if (response.ok) {
+          signIn({
+            access: result.access_token,
+            timsesId: result.data.saksi_id,
+            role: data.login
+          });
+          router.push('/');
+        } else {
+          console.error('Login failed:', result.message);
+          setError(result.message);
+          present();
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+        setError('Error Server');
+        present();
+      } finally {
+        setLoading(false);
+      }
+    }
+
   };
 
   return (
@@ -61,8 +142,8 @@ export default function Login() {
         onDismiss={dismiss}
       >
         <View style={{ padding: 20 }}>
-          <Text className="text-center">{error}</Text>
-          <Button label="Tutup" onPress={dismiss} />
+          <Text className="text-center dark:text-black">{error}</Text>
+          <Button label="Tutup" variant="blue" onPress={dismiss} />
         </View>
       </Modal>
     </>

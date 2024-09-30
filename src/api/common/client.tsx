@@ -5,6 +5,7 @@ import { getToken } from '../../core/auth/utils';
 export const client = axios.create({
   baseURL: Env.API_URL,
 });
+
 client.interceptors.request.use(
   async (config) => {
     // Retrieve the token from storage

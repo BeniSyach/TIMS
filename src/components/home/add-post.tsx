@@ -6,12 +6,8 @@ import { Button } from '@/ui';
 export const AddPost = () => {
   return (
     <>
-      <Link href="/pendukung/add-post" asChild>
-        <Button
-          className="mb-3"
-          label="Tambah Pendukung/Relawan"
-          variant="secondary"
-        />
+      <Link href="/timses/add-post" asChild>
+        <Button className="mb-3" label="Tambah Pendukung" variant="secondary" />
       </Link>
     </>
   );

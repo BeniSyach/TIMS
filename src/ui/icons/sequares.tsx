@@ -3,7 +3,11 @@ import { StyleSheet } from 'react-native';
 import type { SvgProps } from 'react-native-svg';
 import Svg, { Path } from 'react-native-svg';
 
-export const Sequares = ({ color = 'currentColor', style, ...props }: SvgProps) => (
+export const Sequares = ({
+  color = 'currentColor',
+  style,
+  ...props
+}: SvgProps) => (
   <Svg
     width={24}
     height={24}

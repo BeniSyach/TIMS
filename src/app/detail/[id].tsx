@@ -1,27 +1,103 @@
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { Env } from '@env';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
-
 import { getDetailPendukung } from '@/api';
-import { Border } from '@/components/border';
-import { ProfilHome } from '@/components/profil-home';
-import { Title } from '@/components/title';
-import { ActivityIndicator, FocusAwareStatusBar, Text, View } from '@/ui';
+import type { PendukungFormProps } from '@/components/pendukung/edit-pendukung';
+import { EditPendukung } from '@/components/pendukung/edit-pendukung';
+import { getToken } from '@/core/auth/utils';
+import {
+  ActivityIndicator,
+  Button,
+  FocusAwareStatusBar,
+  Modal,
+  ScrollView,
+  Text,
+  useModal,
+  View,
+} from '@/ui';
 
 export default function PendukungDetail() {
   const local = useLocalSearchParams<{ id: string }>();
-
+  const [loading, setLoading] = React.useState(false);
+  const { ref, present, dismiss } = useModal();
+  const [error, setError] = React.useState<string | null>(null);
+  const router = useRouter();
   const { data, isPending, isError } = getDetailPendukung({
     //@ts-ignore
     variables: { id: local.id },
   });
+  console.log('data detail pendukung edit', data);
+
+  const onSubmit: PendukungFormProps['onSubmit'] = async (Fromdata) => {
+    console.log('data edit Pendukung', Fromdata);
+    setLoading(true);
+    const token = await getToken();
+    if (!token?.access) {
+      console.error('Token is invalid or missing');
+      setError('Gagal mendapatkan token. Silakan coba lagi.');
+      present();
+      setLoading(false);
+      return;
+    }
+
+    console.log('token', token.access);
+    console.log('id data pendukung', data.data.pendukung_id);
+    try {
+      const response = await fetch(
+        `${Env.API_URL}/api/v1/timses/pendukung/update/${data.data.pendukung_id}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token.access}`,
+          },
+          body: JSON.stringify({
+            nik: Number(Fromdata.nik),
+            name: Fromdata.name,
+            phone: Fromdata.phone,
+            password: 'masuk123',
+            kabupaten: '1207',
+            kecamatan: Fromdata.kecamatan,
+            desa: Fromdata.desa,
+            address: Fromdata.address,
+            tps: Fromdata.tps,
+            unit: Fromdata.unit,
+            bantuan: Fromdata.bantuan
+          }),
+        }
+      );
+
+      const result = await response.json();
+      console.log('data response', result);
+      if (response.ok) {
+        console.log('berhasil kirim data');
+        setError('Berhasil Edit Data Pendukung');
+        present();
+        setTimeout(() => {
+          dismiss(); // Dismiss the modal
+          router.back(); // Navigate back to the previous screen
+        }, 2000); // You can adjust the timeout as needed
+      } else {
+        console.error('Tambah Data Pendukung failed:', result.message);
+        setError(result.message);
+        present();
+      }
+    } catch (error) {
+      console.error('Error during Edit Data Pendukung:', error);
+      setError('Gagal Edit Data Pendukung');
+      present();
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (isPending) {
     return (
       <View className="flex-1 justify-center  p-3">
         <Stack.Screen
           options={{
-            title: 'Total Pendukung',
-            headerBackTitle: 'Total Pendukung',
+            title: 'Edit Pendukung',
+            headerBackTitle: 'Edit Pendukung',
           }}
         />
         <FocusAwareStatusBar />
@@ -34,12 +110,12 @@ export default function PendukungDetail() {
       <View className="flex-1 justify-center p-3">
         <Stack.Screen
           options={{
-            title: 'Total Pendukung',
-            headerBackTitle: 'Total Pendukung',
+            title: 'Edit Pendukung',
+            headerBackTitle: 'Edit Pendukung',
           }}
         />
         <FocusAwareStatusBar />
-        <Text className="text-center">Error loading post Total Pendukung</Text>
+        <Text className="text-center">Error loading Detail Pendukung</Text>
       </View>
     );
   }
@@ -47,26 +123,24 @@ export default function PendukungDetail() {
     <>
       <Stack.Screen
         options={{
-          title: 'Pendukung',
-          headerBackTitle: 'Pendukung',
+          title: 'Edit Data Pendukung',
+          headerBackTitle: 'Edit Data Pendukung',
         }}
       />
-      <Border>
-        <ProfilHome
-          text="Raisa"
-          subText="Calon DPRD Kota/Kab"
-          profil={data.url}
-        />
-      </Border>
-      <Border>
-        <Title text={data.title} />
-      </Border>
-      <Border>
-        <Title text="tes" />
-      </Border>
-      <Border>
-        <Title text="tes" />
-      </Border>
+      <ScrollView className="flex-1 p-4">
+        <EditPendukung onSubmit={onSubmit} loading={loading} data={data.data} />
+      </ScrollView>
+      <Modal
+        ref={ref}
+        snapPoints={['40%']}
+        title="Login Error"
+        onDismiss={dismiss}
+      >
+        <View style={{ padding: 20 }}>
+          <Text className="text-center dark:text-black">{error}</Text>
+          <Button label="Tutup" variant="blue" onPress={dismiss} />
+        </View>
+      </Modal>
     </>
   );
 }

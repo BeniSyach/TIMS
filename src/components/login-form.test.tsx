@@ -11,12 +11,12 @@ const onSubmitMock: jest.Mock<LoginFormProps['onSubmit']> = jest.fn();
 
 describe('LoginForm Form ', () => {
   it('renders correctly', async () => {
-    render(<LoginForm />);
+    render(<LoginForm loading={false} />);
     expect(await screen.findByText(/Sign in/i)).toBeOnTheScreen();
   });
 
   it('should display required error when values are empty', async () => {
-    render(<LoginForm />);
+    render(<LoginForm loading={false} />);
 
     const button = screen.getByTestId('login-button');
     expect(screen.queryByText(/Email is required/i)).not.toBeOnTheScreen();
@@ -26,7 +26,7 @@ describe('LoginForm Form ', () => {
   });
 
   it('should display matching error when email is invalid', async () => {
-    render(<LoginForm />);
+    render(<LoginForm loading={false} />);
 
     const button = screen.getByTestId('login-button');
     const emailInput = screen.getByTestId('email-input');
@@ -41,7 +41,7 @@ describe('LoginForm Form ', () => {
   });
 
   it('Should call LoginForm with correct values when values are valid', async () => {
-    render(<LoginForm onSubmit={onSubmitMock} />);
+    render(<LoginForm onSubmit={onSubmitMock} loading={false} />);
 
     const button = screen.getByTestId('login-button');
     const emailInput = screen.getByTestId('email-input');

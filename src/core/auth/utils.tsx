@@ -5,6 +5,7 @@ const TOKEN = 'token';
 export type TokenType = {
   access: string;
   timsesId: string;
+  role : string
 };
 
 export const getToken = () => getItem<TokenType>(TOKEN);

@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import type { ConfigContext, ExpoConfig } from '@expo/config';
 
 import { ClientEnv, Env } from './env';
@@ -9,7 +8,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   description: `${Env.NAME} Mobile App`,
   owner: Env.EXPO_ACCOUNT_OWNER,
   scheme: Env.SCHEME,
-  slug: 'obytesapp',
+  slug: 'tims',
   version: Env.VERSION.toString(),
   orientation: 'portrait',
   icon: './assets/icon.png',
@@ -26,6 +25,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: Env.BUNDLE_ID,
+    buildNumber : "4"
   },
   experiments: {
     typedRoutes: true,
@@ -36,6 +36,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: '#2E3C4B',
     },
     package: Env.PACKAGE,
+    versionCode: 4
   },
   web: {
     favicon: './assets/favicon.png',
@@ -59,23 +60,57 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
     [
-      'app-icon-badge',
+      'expo-document-picker',
       {
-        enabled: Env.APP_ENV !== 'production',
-        badges: [
-          {
-            text: Env.APP_ENV,
-            type: 'banner',
-            color: 'white',
-          },
-          {
-            text: Env.VERSION.toString(),
-            type: 'ribbon',
-            color: 'white',
-          },
-        ],
+        iCloudContainerEnvironment: 'Production',
       },
     ],
+    // [
+    //   'app-icon-badge',
+    //   {
+    //     enabled: Env.APP_ENV !== 'production',
+    //     badges: [
+    //       {
+    //         text: Env.APP_ENV,
+    //         type: 'banner',
+    //         color: 'white',
+    //       },
+    //       {
+    //         text: Env.VERSION.toString(),
+    //         type: 'ribbon',
+    //         color: 'white',
+    //       },
+    //     ],
+    //   },
+    // ],
+    [
+      "expo-build-properties",
+      {
+        "android": {
+          "usesCleartextTraffic": true
+        }
+      }
+    ],
+    [
+      "expo-image-picker",
+      {
+        "photosPermission": "The app accesses your photos to let you share them with your friends."
+      }
+    ],
+    [
+      "expo-media-library",
+      {
+        "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
+        "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos.",
+        "isAccessMediaLocationEnabled": true
+      }
+    ],
+    [
+      "expo-location",
+      {
+        "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+      }
+    ]
   ],
   extra: {
     ...ClientEnv,

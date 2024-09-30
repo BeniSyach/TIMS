@@ -3,8 +3,6 @@ export type Timses = {
   nik: number;
   name: string;
   phone: string;
-  email: string;
-  password: string;
   kabupaten: string;
   kecamatan: string;
   desa: string;
@@ -13,4 +11,5 @@ export type Timses = {
   created_by: number;
   created_at: string;
   updated_at: string;
+  total_pendukung: number;
 };

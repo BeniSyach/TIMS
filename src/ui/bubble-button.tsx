@@ -1,20 +1,23 @@
 import React from 'react';
-import { Text, Pressable, View, PressableProps } from 'react-native';
+import type { GestureResponderEvent, PressableProps } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { ActivityIndicator } from 'react-native';
-import { tv, VariantProps } from 'tailwind-variants';
 import Animated, {
-  useSharedValue,
   useAnimatedStyle,
+  useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
-import type { GestureResponderEvent } from 'react-native';
-import { Sequares } from './icons';
+import type { VariantProps } from 'tailwind-variants';
+import { tv } from 'tailwind-variants';
+
 import { white } from './colors';
+import { Sequares } from './icons';
 
 // Tailwind Variants Configuration
 const button = tv({
   slots: {
-    container: 'my-2 flex flex-row items-center justify-center rounded-full px-4',
+    container:
+      'my-2 flex flex-row items-center justify-center rounded-full px-4',
     label: 'font-inter text-base font-semibold',
     indicator: 'h-6 text-white',
   },
@@ -48,7 +51,7 @@ const button = tv({
       ghost: {
         container: 'bg-transparent',
         label: 'text-black underline dark:text-white',
-        indicator: 'text-black dark:text-white',
+        indicator: 'text-black dark:text-black',
       },
       link: {
         container: 'bg-transparent',
@@ -107,29 +110,25 @@ const button = tv({
 // Define TypeScript types
 type ButtonVariants = VariantProps<typeof button>;
 
-interface BubbleButtonProps extends ButtonVariants, Omit<PressableProps, 'disabled'> {
-  label?: string;
+interface BubbleButtonProps
+  extends ButtonVariants,
+    Omit<PressableProps, 'disabled'> {
   loading?: boolean;
   className?: string;
-  textClassName?: string;
   active?: boolean;
-  icon?: React.ReactNode; // Add icon prop
 }
 
 const BubbleButton = React.forwardRef<View, BubbleButtonProps>(
   (
     {
-      label,
       loading = false,
       variant = 'default',
       disabled = false,
       size = 'default',
       className = '',
       testID,
-      textClassName = '',
       active = false,
       onPress,
-      icon, 
       ...rest
     },
     ref
@@ -166,7 +165,6 @@ const BubbleButton = React.forwardRef<View, BubbleButtonProps>(
           testID={testID}
           {...rest}
         >
-
           {loading ? (
             <ActivityIndicator
               size="small"

@@ -10,14 +10,14 @@ interface Props {
 const KategoriButton: React.FC<Props> = ({ selected, setSelected }) => {
   return (
     <View className="flex-row justify-between p-4">
-      <Button
+      {/* <Button
         variant="blue"
         size="default"
         label="Penduduk"
         className="mr-2 flex-1"
         active={selected === 'penduduk' ? true : false}
         onPress={() => setSelected('penduduk')}
-      />
+      /> */}
       <Button
         variant="blue"
         size="default"
