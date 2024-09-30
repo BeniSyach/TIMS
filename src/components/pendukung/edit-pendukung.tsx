@@ -141,18 +141,21 @@ export const EditPendukung = ({
         options={optionsKec}
         value={kecamatan}
         onSelect={(option) => setKecamatan(option)}
+        placeholder='Pilih Kecamatan...'
       />
       <Select
         label="Desa"
         options={optionsDesa}
         value={desa}
         onSelect={(option) => setDesa(option)}
+        placeholder='Pilih Desa...'
       />
       <Select
         label="TPS"
         options={optionsTps}
         value={tps}
         onSelect={(option) => setTps(option)}
+        placeholder='Pilih TPS...'
       />
       <ControlledInput
         name="phone"
@@ -167,12 +170,14 @@ export const EditPendukung = ({
         options={optionsUnit}
         value={unitValue}
         onSelect={(option) => setUnitValue(option)}
+        placeholder='Pilih Unit...'
       />
       <MultipleSelect
         label="Bantuan"
         options={optionsBantuan}
         value={masterValue}
         onSelect={(option) => setMasterValue(option)}
+        placeholder='Pilih Bantuan...'
       />
       <Button
         label="Edit Data Pendukung"

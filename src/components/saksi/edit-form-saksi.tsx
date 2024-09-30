@@ -18,9 +18,9 @@ const schema = z.object({
   desa: z.string({ required_error: 'Desa Tidak Boleh Kosong' }),
   kecamatan: z.string({ required_error: 'Kecamatan Tidak Boleh Kosong' }),
   suara: z.string({ required_error: 'Suara Tidak Boleh Kosong' }),
-  bukti_photo: z.string({ required_error: 'Photo Tidak Boleh Kosong' }).optional(),
-  mimeType: z.string({ required_error: 'mimeType Tidak Boleh Kosong' }).optional(),
-  name: z.string({ required_error: 'name Tidak Boleh Kosong' }).optional(),
+  bukti_photo: z.string({ required_error: 'Photo Tidak Boleh Kosong' }),
+  mimeType: z.string({ required_error: 'mimeType Tidak Boleh Kosong' }),
+  name: z.string({ required_error: 'name Tidak Boleh Kosong' }),
   id: z.string().array().optional(),
 });
 
@@ -195,18 +195,21 @@ export const EditSaksi = ({
         options={optionsTps}
         value={tps}
         onSelect={(option) => setTps(option)}
+        placeholder='Pilih No TPS...'
       />
       <Select
         label="Kecamatan"
         options={optionsKec}
         value={kecamatan}
         onSelect={(option) => setKecamatan(option)}
+        placeholder='Pilih Kecamatan...'
       />
       <Select
         label="Desa"
         options={optionsDesa}
         value={desa}
         onSelect={(option) => setDesa(option)}
+        placeholder='Pilih Desa...'
       />
       <ControlledInput
         name="suara"

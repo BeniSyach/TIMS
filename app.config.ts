@@ -25,7 +25,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: Env.BUNDLE_ID,
-    buildNumber : "2"
+    buildNumber : "4"
   },
   experiments: {
     typedRoutes: true,
@@ -36,7 +36,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: '#2E3C4B',
     },
     package: Env.PACKAGE,
-    versionCode: 2
+    versionCode: 4
   },
   web: {
     favicon: './assets/favicon.png',

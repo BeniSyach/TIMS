@@ -59,7 +59,7 @@ export default function Login() {
 
     if (data.login === 'Bupati'){
       try {
-        const response = await fetch(`${Env.API_URL_BUPATI}/api/v1/auth/login`, {
+        const response = await fetch(`${Env.API_URL_BUPATI}/api/v1/bupati/auth/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

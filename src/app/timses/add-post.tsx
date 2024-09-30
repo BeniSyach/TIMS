@@ -12,6 +12,8 @@ export default function AddPost() {
   const [loading, setLoading] = React.useState(false);
   const { ref, present, dismiss } = useModal();
   const [error, setError] = React.useState<string | null>(null);
+  const formRef = React.useRef<any>(null);
+
   const onSubmit: PendukungFormProps['onSubmit'] = async (data) => {
     console.log('data Tambah Pendukung', data);
     setLoading(true);
@@ -58,6 +60,9 @@ export default function AddPost() {
         console.log('berhasil kirim data');
         setError('Berhasil Tambah Data Pendukung');
         present();
+        if (formRef.current) {
+          formRef.current.resetForm();
+        }
       } else {
         console.error('Tambah Data Pendukung failed:', result.message);
         setError(result.message);
@@ -83,12 +88,12 @@ export default function AddPost() {
         }}
       />
       <ScrollView className="flex-1 p-4">
-        <PostPendukung onSubmit={onSubmit} loading={loading} />
+        <PostPendukung onSubmit={onSubmit} loading={loading} resetForm={() => formRef.current?.reset()}  />
       </ScrollView>
       <Modal
         ref={ref}
         snapPoints={['40%']}
-        title="Login Error"
+        title="Status"
         onDismiss={dismiss}
       >
         <View style={{ padding: 20 }}>

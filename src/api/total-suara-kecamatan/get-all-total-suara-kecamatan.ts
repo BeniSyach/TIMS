@@ -20,9 +20,9 @@ export const getTotalSuaraKecamatan = createQuery<
     const token = await getToken();
     let response;
     if(token.role == 'Bupati'){
-      console.log('url', '/api/v1/timses/dashboard/suara-per-kecamatan');
-      response = await client.post<ApiResponse>(
-       `/api/v1/timses/dashboard/suara-per-kecamatan`
+      console.log('url', '/api/v1/bupati/dashboard/suara-per-kecamatan');
+      response = await clientBupati.post<ApiResponse>(
+       `/api/v1/bupati/dashboard/suara-per-kecamatan`
      );
     }else{
       console.log('url', '/api/v1/timses/dashboard/suara-per-kecamatan');

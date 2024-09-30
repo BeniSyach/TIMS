@@ -3,12 +3,12 @@ import React from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { Button, ControlledInput, Option, Select, Text, View } from '@/ui';
+import { Button, ControlledInput, Image, Option, Select, Text, View } from '@/ui';
 
 const optionsLogin: Option[] = [
   { value: 'Timses', label: 'Timses' },
   { value: 'Saksi', label: 'Saksi' },
-  { value: 'Bupati', label: 'Bupati' },
+  { value: 'Bupati', label: 'Paslon' },
 ];
 
 const schema = z.object({
@@ -42,15 +42,20 @@ export const LoginForm = ({ onSubmit = () => {}, loading }: LoginFormProps) => {
   }, [Login, setValue]);
   return (
     <View className="flex-1 justify-center p-4">
-      <Text testID="form-title" className="pb-6 text-center text-2xl">
-        Masuk
-      </Text>
+        <View className='flex-row justify-center items-center'>
+          <Image source={require('../../assets/adaptive-icon.png')} className='h-24 w-24' />
+          <Text testID="form-title" className="pl-4 text-center text-2xl font-bold text-teal-500">
+            TIMS
+          </Text>
+        </View>
+
 
       <ControlledInput
         testID="email-input"
         control={control}
         name="email"
         label="Email"
+        placeholder='Masukkan Email Anda'
       />
       <ControlledInput
         testID="password-input"
@@ -65,6 +70,7 @@ export const LoginForm = ({ onSubmit = () => {}, loading }: LoginFormProps) => {
         options={optionsLogin}
         value={Login}
         onSelect={(option) => setLogin(option)}
+        placeholder='Pilih Login Sebagai ....'
       />
       <Button
         testID="login-button"

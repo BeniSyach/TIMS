@@ -34,11 +34,13 @@ export type FormType = z.infer<typeof schema>;
 export type PendukungFormProps = {
   onSubmit?: SubmitHandler<FormType>;
   loading: boolean;
+  resetForm: () => void;
 };
 
 export const PostPendukung = ({
   onSubmit = () => {},
   loading,
+  resetForm,
 }: PendukungFormProps) => {
   const [location, setLocation] = React.useState<Location.LocationObject | null>(null);
   const [watcher, setWatcher] = React.useState<Location.LocationSubscription | null>(null);
@@ -67,6 +69,16 @@ export const PostPendukung = ({
   });
   const {data: unit} = getUnitMaster();
   const {data: master} = getMasterBantuan();
+
+  React.useEffect(() => {
+    resetForm(); 
+    reset(); 
+    setKecamatan(undefined); // Kembalikan pilihan select ke default/placeholder
+    setDesa(undefined);
+    setTps(undefined);
+    setUnitValue(undefined);
+    setMasterValue([]);
+  }, [resetForm]);
 
   React.useEffect(() => {
     if (kecamatan) setValue('kecamatan', kecamatan.toString());
@@ -192,6 +204,7 @@ export const PostPendukung = ({
           label="Nama Lengkap"
           control={control}
           testID="name"
+          placeholder='Masukkan Nama Lengkap'
           onFocus={() => setActiveInput('name')}
         />
       <ControlledInput
@@ -201,6 +214,7 @@ export const PostPendukung = ({
         keyboardType="numeric"
         multiline
         testID="nik-input"
+        placeholder='Masukkan NIK'
         onFocus={() => setActiveInput('nik')}
       />
       <ControlledInput
@@ -208,6 +222,7 @@ export const PostPendukung = ({
         label="Alamat"
         control={control}
         testID="address"
+        placeholder='Masukkan Alamat'
         onFocus={() => setActiveInput('address')}
       />
       <Select
@@ -215,18 +230,21 @@ export const PostPendukung = ({
         options={optionsKec}
         value={kecamatan}
         onSelect={(option) => setKecamatan(option)}
+        placeholder='Pilih Kecamatan...'
       />
       <Select
         label="Desa"
         options={optionsDesa}
         value={desa}
         onSelect={(option) => setDesa(option)}
+        placeholder='Pilih Desa...'
       />
       <Select
         label="TPS"
         options={optionsTps}
         value={tps}
         onSelect={(option) => setTps(option)}
+        placeholder='Pilih No TPS...'
       />
       <ControlledInput
         name="phone"
@@ -235,6 +253,7 @@ export const PostPendukung = ({
         keyboardType="numeric"
         multiline
         testID="phone-input"
+        placeholder='Masukkan No Hp'
         onFocus={() => setActiveInput('phone')}
       />
       <Select
@@ -242,12 +261,14 @@ export const PostPendukung = ({
         options={optionsUnit}
         value={unitValue}
         onSelect={(option) => setUnitValue(option)}
+        placeholder='Pilih Unit...'
       />
       <MultipleSelect
         label="Bantuan"
         options={optionsBantuan}
         value={masterValue}
         onSelect={(option) => setMasterValue(option)}
+        placeholder='Pilih Bantuan...'
       />
 
       {errorMsg ? (

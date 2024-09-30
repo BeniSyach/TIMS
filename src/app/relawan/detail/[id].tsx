@@ -52,9 +52,6 @@ export default function PendukungDetail() {
         }}
       />
       <Border>
-        <ProfilHome text="Raisa" subText="Calon DPRD Kota/Kab" profil="tes" />
-      </Border>
-      <Border>
         <Title text={data.data.name} />
       </Border>
       <Border>

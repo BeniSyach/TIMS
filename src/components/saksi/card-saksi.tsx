@@ -15,7 +15,10 @@ export const CardSaksiComponent = ({
   kecamatan,
   desa,
   tps,
-  suara
+  suara,
+  nama_desa,
+  nama_kecamatan,
+  nama_tps
 }: Props) => {
   const currentScheme = colorScheme.get();
   const color = currentScheme === 'dark' ? '#FFF' : '#000';
@@ -27,11 +30,11 @@ export const CardSaksiComponent = ({
         <Feed color={color} />
         <View className="flex-col pl-3">
           <Text className="text-sm text-black dark:text-white">
-            {kecamatan}
+            Kecamatan {nama_kecamatan}
           </Text>
-          <Text className="text-sm text-black dark:text-white">{desa}</Text>
+          <Text className="text-sm text-black dark:text-white">Desa {nama_desa}</Text>
           <Text className="text-sm text-black dark:text-white">
-            TPS {tps}
+            TPS {nama_tps}
           </Text>
           <Text className="text-sm text-black dark:text-white">
             Total Suara : {suara}

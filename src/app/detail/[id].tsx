@@ -1,5 +1,5 @@
 import { Env } from '@env';
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
 import { getDetailPendukung } from '@/api';
 import type { PendukungFormProps } from '@/components/pendukung/edit-pendukung';
@@ -21,6 +21,7 @@ export default function PendukungDetail() {
   const [loading, setLoading] = React.useState(false);
   const { ref, present, dismiss } = useModal();
   const [error, setError] = React.useState<string | null>(null);
+  const router = useRouter();
   const { data, isPending, isError } = getDetailPendukung({
     //@ts-ignore
     variables: { id: local.id },
@@ -72,6 +73,10 @@ export default function PendukungDetail() {
         console.log('berhasil kirim data');
         setError('Berhasil Edit Data Pendukung');
         present();
+        setTimeout(() => {
+          dismiss(); // Dismiss the modal
+          router.back(); // Navigate back to the previous screen
+        }, 2000); // You can adjust the timeout as needed
       } else {
         console.error('Tambah Data Pendukung failed:', result.message);
         setError(result.message);

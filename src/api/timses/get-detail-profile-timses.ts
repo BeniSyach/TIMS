@@ -21,9 +21,9 @@ const fetchDetailTimses = async (): Promise<Response> => {
     .post(`/api/v1/saksi/profil`)
     .then((response) => response.data.data);
   }else if(tokenData?.role === 'Bupati'){
-    console.log('url', `/api/v1/bupati/profile`);
+    console.log('url', `/api/v1/bupati/user-bupati/profile`);
     return clientBupati
-    .post(`/api/v1/bupati/profile`)
+    .post(`/api/v1/bupati/user-bupati/profile`)
     .then((response) => response.data.data);
   }else{
     console.log('url', `/api/v1/timses/timses-mlm/profile/${tokenData.timsesId}`);

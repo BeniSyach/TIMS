@@ -309,6 +309,7 @@ export default function ProfilePage() {
           options={optionsKec}
           value={valueKec}
           onSelect={(option) => setValueKec(option)}
+          placeholder='Pilih Kecamatan...'
         />
       )}
        {token?.role !== 'Bupati' && (
@@ -317,6 +318,7 @@ export default function ProfilePage() {
           options={optionsDesa}
           value={valueDesa}
           onSelect={(option) => setValueDesa(option)}
+          placeholder='Pilih Desa...'
         />
       )}
         <ControlledInput
@@ -333,6 +335,7 @@ export default function ProfilePage() {
         options={options}
         value={valueStatus}
         onSelect={(option) => setValueStatus(option)}
+        placeholder='Pilih Status...'
       />
         )}
       {token?.role === 'Timses' && (

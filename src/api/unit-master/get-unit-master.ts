@@ -16,9 +16,9 @@ export const getUnitMaster = createQuery<ApiResponse, Variables, AxiosError>({
   queryKey: ['UnitMaster'],
   fetcher: async () => {
     try {
-      console.log('url', '/api/v1/timses/unit?page=1&limit=10');
+      console.log('url', '/api/v1/timses/unit?page=1&limit=1000');
       const response = await client.post<ApiResponse>(
-        `/api/v1/timses/unit?page=1&limit=10`
+        `/api/v1/timses/unit?page=1&limit=1000`
       );
       return response.data; // Mengambil data dari respons
     } catch (error) {

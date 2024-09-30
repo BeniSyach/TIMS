@@ -172,18 +172,21 @@ export const PostSaksi = ({
         options={optionsTps}
         value={tps}
         onSelect={(option) => setTps(option)}
+        placeholder='Pilih No TPS...'
       />
       <Select
         label="Kecamatan"
         options={optionsKec}
         value={kecamatan}
         onSelect={(option) => setKecamatan(option)}
+        placeholder='Pilih Kecamatan...'
       />
       <Select
         label="Desa"
         options={optionsDesa}
         value={desa}
         onSelect={(option) => setDesa(option)}
+        placeholder='Pilih Desa...'
       />
       <ControlledInput
         name="suara"
